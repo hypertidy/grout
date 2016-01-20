@@ -1,0 +1,13 @@
+Package: tropo
+Title: Create Raster Tiles
+Version: 0.0.1.9000
+Authors@R: person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre"))
+Description: Create Raster Tiles from large input files. 
+Depends:
+    R (>= 3.2.2), 
+    raster
+License: GPL-3
+LazyData: true
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
