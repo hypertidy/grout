@@ -12,19 +12,20 @@ tropo <- function() {
   } 
   r <- raster(file)
   
-  tiles(.tilescheme(r))
+  tiles(r)
 }
 
 .tilescheme <- function(x, blockX = 256, blockY = 256) {
   dm <- dim(x)
-  ntilesX <- ncol(x) %/% blockX
-  dangleX <- ncol(x) %% blockX
-  ntilesY <- nrow(x) %/% blockY
-  dangleY <- nrow(x) %% blockY
+  ntilesX <- dm[2L] %/% blockX
+  dangleX <- dm[2L] %% blockX
+  ntilesY <- dm[1L] %/% blockY
+  dangleY <- dm[1L] %% blockY
   if (dangleX > 0) ntilesX <- ntilesX + 1
   if (dangleY > 0) ntilesY <- ntilesY + 1
   
-  list(inputraster = raster(x), ntilesX = ntilesX, ntilesY = ntilesY, 
+  list(inputraster = raster(x), 
+       ntilesX = ntilesX, ntilesY = ntilesY, 
        dangleX = dangleX, dangleY = dangleY, 
        blockX = blockX, blockY = blockY)
 
@@ -33,8 +34,8 @@ tropo <- function() {
 extent.tilescheme <- function(x) {
   extent(xmin(x$inputraster), 
          xmax(x$inputraster) +  (x$blockX - x$dangleX) * res(x$inputraster)[1], 
-         ymin(x$inputraster), 
-         ymax(x$inputraster) +  (x$blockY - x$dangleY) * res(x$inputraster)[2])
+         ymin(x$inputraster) -  (x$blockY - x$dangleY) * res(x$inputraster)[2], 
+         ymax(x$inputraster) )
 }
 
 #' tiles of a raster
