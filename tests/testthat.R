@@ -1,4 +1,4 @@
-library(testthat)
-library(tropo)
+#library(testthat)
+#library(tropo)
 
-test_check("tropo")
+#test_check("tropo")
