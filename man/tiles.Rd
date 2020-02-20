@@ -24,6 +24,8 @@ rv <- tropo:::raster0(volcano)
 ## one (too) big tile
 tile <- tiles(rv)
 plot(tile)
+tile
+
 raster::image(rv, add = TRUE)
 axis(1); axis(2)
 

@@ -18,15 +18,22 @@ tropo <- function() {
 # the dimensions based on blockX/blockY
 .tilescheme <- function(x, blockX = 256, blockY = 256) {
   dm <- dim(x)
-  ntilesX <- dm[2L] %/% blockX
-  dangleX <- dm[2L] %% blockX
-  ntilesY <- dm[1L] %/% blockY
-  dangleY <- dm[1L] %% blockY
-  if (dangleX > 0) ntilesX <- ntilesX + 1
-  if (dangleY > 0) ntilesY <- ntilesY + 1
-  if (dm[1L] < blockX) dangleX <- blockX - dm[2L] - 1
-  if (dm[2L] < blockY) dangleY <- blockY - dm[1L] - 1
-  
+  if (dm[2L] <= blockX) {
+    ntilesX <- 1L
+    dangleX <- blockX - dm[2L] 
+  } else {
+    ntilesX <- dm[2L] %/% blockX
+    dangleX <- dm[2L] %% blockX
+  }
+
+  if (dm[1L] <= blockY) {
+    ntilesY <- 1L
+    dangleY <- blockY - dm[1L] 
+  } else {
+    ntilesY <- dm[1L] %/% blockY
+    dangleY <- dm[1L] %%  blockY
+  }
+ 
   structure(list(inputraster = raster(x), 
        ntilesX = ntilesX, ntilesY = ntilesY, 
        dangleX = dangleX, dangleY = dangleY, 
@@ -83,8 +90,8 @@ print.tropo_tiles <- function(x, ...) {
   dm <- dim(x$tileraster)
   ex <- raster::extent(x$tileraster)
   cat(sprintf("tropo tiles: %i\n", prod(dm)))
-  cat(sprintf("    x tiles: %i\n", dm[1L]) )
-  cat(sprintf("    y tiles: %i\n", dm[2L]))
+  cat(sprintf("    x tiles: %i\n", dm[2L]) )
+  cat(sprintf("    y tiles: %i\n", dm[1L]))
   cat(sprintf("     blockX: %i\n", x$scheme$blockX) )
   cat(sprintf("     blockY: %i\n", x$scheme$blockX))
   
@@ -100,7 +107,9 @@ print.tropo_tiles <- function(x, ...) {
 #' @importFrom graphics plot
 #' @export
 plot.tropo_tiles <- function(x, ...) {
-  sp::plot(as_polys(x), ...)
+  plot(as_polys(x), ...)
+  raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
+  invisible(NULL)
 }
 
 
