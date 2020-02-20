@@ -1,18 +1,3 @@
-#' Prepare topo source
-#'
-#' @noRd
-#' @importFrom raster raster extent xmin xmax ymin ymax
-tropo <- function() {
-  file <- .etopo2()
-  ## check if exists
-  if (!file.exists(file)) {
-    stop("no raadsync yet")
-    #do_raadsync()
-  } 
-  r <- raster(file)
-  
-  tiles(r)
-}
 
 # from a raster or matrix, tile out
 # the dimensions based on blockX/blockY
@@ -36,7 +21,7 @@ tropo <- function() {
     dangleY <- dm[1L] %%  blockY
   }
  
-  structure(list(inputraster = raster(x), 
+  structure(list(inputraster = raster::raster(x), 
        ntilesX = ntilesX, ntilesY = ntilesY, 
        dangleX = dangleX, dangleY = dangleY, 
        blockX = blockX, blockY = blockY), 

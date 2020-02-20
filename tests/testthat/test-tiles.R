@@ -43,3 +43,12 @@ test_that("tiles works", {
   
   
 })
+
+test_that("coercion works", {
+  expect_s4_class(as_polys(tiles(r2)), "SpatialPolygonsDataFrame")
+})
+
+test_that("print and plot works", {
+  expect_output(print(tiles(r1)))
+  expect_silent(plot(tiles(r1)))
+})
