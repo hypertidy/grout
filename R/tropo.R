@@ -16,8 +16,10 @@ tropo <- function() {
 
 # from a raster or matrix, tile out
 # the dimensions based on blockX/blockY
-.tilescheme <- function(x, blockX = 256, blockY = 256) {
-  dm <- dim(x)
+.tilescheme <- function(x, blockX = 256L, blockY = 256L) {
+  dm <- as.integer(dim(x))[1:2]
+  blockX <- as.integer(blockX)
+  blockY <- as.integer(blockY)
   if (dm[2L] <= blockX) {
     ntilesX <- 1L
     dangleX <- blockX - dm[2L] 
@@ -107,7 +109,7 @@ print.tropo_tiles <- function(x, ...) {
 #' @importFrom graphics plot
 #' @export
 plot.tropo_tiles <- function(x, ...) {
-  plot(as_polys(x), ...)
+  sp::plot(as_polys(x), ...)
   raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
   invisible(NULL)
 }
