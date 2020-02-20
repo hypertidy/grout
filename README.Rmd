@@ -1,10 +1,7 @@
 ---
-output:
-  md_document:
-    variant: markdown_github
-editor_options: 
-  chunk_output_type: console
+output: github_document
 ---
+
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -12,7 +9,7 @@ editor_options:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "man/figures/README-"
 )
 ```
 

@@ -1,4 +1,6 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![Travis build
@@ -11,8 +13,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/tropo)](https://CRAN.R-project.org/package=tropo)
 <!-- badges: end -->
 
-tropo
-=====
+# tropo
 
 Abstract tiling schemes.
 
@@ -34,7 +35,7 @@ library(tropo)
 plot(t1)
 ```
 
-![](README-grid-1.png)
+![](man/figures/README-grid-1.png)<!-- -->
 
 ``` r
 
@@ -49,7 +50,7 @@ plot(t1)
 plot(t2)
 ```
 
-![](README-grid-2.png)
+![](man/figures/README-grid-2.png)<!-- -->
 
 We can generate polygons from these.
 
@@ -59,7 +60,7 @@ p <- as_polys(t1)
 sp::plot(p)
 ```
 
-![](README-poly-1.png)
+![](man/figures/README-poly-1.png)<!-- -->
 
 Or just plot the scheme.
 
@@ -67,9 +68,9 @@ Or just plot the scheme.
 plot(t1)
 ```
 
-![](README-plot-1.png)
+![](man/figures/README-plot-1.png)<!-- -->
 
-------------------------------------------------------------------------
+-----
 
 Please note that the ‘tropo’ project is released with a [Contributor
 Code of
