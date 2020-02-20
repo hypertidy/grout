@@ -4,3 +4,9 @@
 ^README-.*\.png$
 ^/output/.*$
 ^data-raw$
+^CODE_OF_CONDUCT\.md$
+^\.travis\.yml$
+^appveyor\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
