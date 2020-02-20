@@ -15,7 +15,7 @@ nms <- c("ntilesX", "ntilesY",
 test_that("tiles works", {
   ## also integers
  expect_equal(.rsch(tiles(r0, 5, 8)), 
-              c(1L, 1L, 3L, 3L, 5L, 8L))
+              c(2L, 1L, 2L, 3L, 5L, 8L))
   
   expect_equal(.rsch(tiles(r1, 5, 24)), 
                c(1L, 1L, 2L, 22L, 5L, 24L))
@@ -25,14 +25,14 @@ test_that("tiles works", {
   
   
   expect_equal(.rsch(tiles(r3, 5, 24)), 
-               c(4L, 2L, 0L, 2L, 5L, 24L))
+               c(4L, 3L, 0L, 22L, 5L, 24L))
   
   expect_equal(.rsch(tiles(r4, 5, 24)), 
-               c(1200L, 208L, 2L, 9L, 5L, 24L))
+               c(1201L, 209L, 3L, 15L, 5L, 24L))
   
   
   expect_equal(.rsch(tiles(r4, 501, 23)), 
-               c(11L, 217L, 491L, 10L, 501L, 23L))
+               c(12L, 218L, 10L, 13L, 501L, 23L))
   
   expect_equal(.rsch(tiles(r4, 1, 1)), 
                c(6002L, 5001L, 0L, 0L, 1L, 1L))

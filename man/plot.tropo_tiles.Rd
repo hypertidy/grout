@@ -4,12 +4,16 @@
 \alias{plot.tropo_tiles}
 \title{plot tiles}
 \usage{
-\method{plot}{tropo_tiles}(x, ...)
+\method{plot}{tropo_tiles}(x, ..., border = "grey", lwd = 2)
 }
 \arguments{
 \item{x}{a tropo [tiles()] object}
 
 \item{...}{arguments passed to methods (particularly [sp::plot()])}
+
+\item{border}{the colour of the tile border (default grey)}
+
+\item{lwd}{the width of the tile border (default = 2)}
 }
 \description{
 plot tiles

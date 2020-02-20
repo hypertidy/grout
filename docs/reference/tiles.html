@@ -141,12 +141,12 @@
     <pre class="examples"><div class='input'><span class='no'>rv</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tropo</span><span class='kw ns'>:::</span><span class='fu'>raster0</span>(<span class='no'>volcano</span>)
 <span class='co'>## one (too) big tile</span>
 <span class='no'>tile</span> <span class='kw'>&lt;-</span> <span class='fu'>tiles</span>(<span class='no'>rv</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>tile</span>)</div><div class='input'><span class='no'>tile</span></div><div class='output co'>#&gt; tropo tiles: 1
-#&gt;     x tiles: 1
-#&gt;     y tiles: 1
-#&gt;      blockX: 256
-#&gt;      blockY: 256
-#&gt;      dangle: 195,169 (x,y)</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>tile</span>)</div><div class='input'><span class='no'>tile</span></div><div class='output co'>#&gt;           tiles: 1, 1 (x * y = 1)
+#&gt;           block: 256, 256 
+#&gt;          dangle: 195, 169 
+#&gt; tile resolution: 256, 256 
+#&gt;     tile extent: 0, 256, -169, 87 (xmin,xmax,ymin,ymax)
+#&gt;           grain: 1, 1 (256 : x, 256 : y)</div><div class='input'>
 <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/image.html'>image</a></span>(<span class='no'>rv</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>1</span>); <span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>2</span>)</div><div class='img'><img src='tiles-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## more size appropriate</span>
 <span class='no'>tils</span> <span class='kw'>&lt;-</span> <span class='fu'>tiles</span>(<span class='no'>rv</span>, <span class='fl'>8</span>, <span class='fl'>8</span>)

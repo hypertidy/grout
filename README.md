@@ -17,21 +17,52 @@ status](https://www.r-pkg.org/badges/version/tropo)](https://CRAN.R-project.org/
 
 Abstract tiling schemes.
 
-Given a grid, impose a tiling scheme. The dangle is how much overlap the
-tiles imply.
+Given a grid, impose a tiling scheme. The dangle is overlap the tiles
+impose (in pixels).
+
+We use the term “block” to refer to the size of each tile in pixels.
+
+Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap.
+
+``` r
+library(tropo)
+r0 <- raster::raster(matrix(0, 12, 16), xmn = 0, xmx = 16, ymn = 0, ymx = 12)
+tiles(r0, blockX = 4, blockY = 4)
+#>           tiles: 4, 3 (x * y = 12)
+#>           block: 4, 4 
+#>          dangle: 0, 0 
+#> tile resolution: 4, 4 
+#>     tile extent: 0, 16, 0, 12 (xmin,xmax,ymin,ymax)
+#>           grain: 1, 1 (4 : x, 4 : y)
+```
+
+But, if our raster has an dimension that doesn’t divide neatly into the
+block size, then there is some tile overlap. This should work for any
+raster dimension and any arbitrary tile size.
+
+``` r
+r1 <- raster::raster(matrix(0, 13, 15), xmn = 0, xmx = 15, ymn = 0, ymx = 13)
+tiles(r1, 4, 4)
+#>           tiles: 4, 4 (x * y = 16)
+#>           block: 4, 4 
+#>          dangle: 1, 3 
+#> tile resolution: 4, 4 
+#>     tile extent: 0, 16, -3, 13 (xmin,xmax,ymin,ymax)
+#>           grain: 1, 1 (4 : x, 4 : y)
+```
 
 ``` r
 
 r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
 
-library(tropo)
+
 (t1 <- tiles(r, blockX = 12, blockY = 12))
-#> tropo tiles: 6
-#>     x tiles: 3
-#>     y tiles: 2
-#>      blockX: 12
-#>      blockY: 12
-#>      dangle: 8,6 (x,y)
+#>           tiles: 4, 3 (x * y = 12)
+#>           block: 12, 12 
+#>          dangle: 4, 6 
+#> tile resolution: 1.090909, 1.2 
+#>     tile extent: 0, 4.363636, -0.6, 3 (xmin,xmax,ymin,ymax)
+#>           grain: 0.09090909, 0.1 (12 : x, 12 : y)
 plot(t1)
 ```
 
@@ -40,12 +71,12 @@ plot(t1)
 ``` r
 
 (t2 <- tiles(volcano, 12, 16))
-#> tropo tiles: 25
-#>     x tiles: 5
-#>     y tiles: 5
-#>      blockX: 12
-#>      blockY: 12
-#>      dangle: 1,7 (x,y)
+#>           tiles: 6, 6 (x * y = 36)
+#>           block: 12, 16 
+#>          dangle: 11, 9 
+#> tile resolution: 0.1967213, 0.183908 
+#>     tile extent: 0, 1.180328, -0.1034483, 1 (xmin,xmax,ymin,ymax)
+#>           grain: 0.01639344, 0.01149425 (12 : x, 16 : y)
 
 plot(t2)
 ```

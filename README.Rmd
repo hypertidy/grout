@@ -25,13 +25,35 @@ knitr::opts_chunk$set(
 Abstract tiling schemes. 
 
 
-Given a grid, impose a tiling scheme. The dangle is how much overlap the tiles imply. 
+Given a grid, impose a tiling scheme. The dangle is overlap the tiles impose (in pixels). 
+
+We use the term "block" to refer to the size of each tile in pixels. 
+
+Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap. 
+
+```{r overlap}
+library(tropo)
+r0 <- raster::raster(matrix(0, 12, 16), xmn = 0, xmx = 16, ymn = 0, ymx = 12)
+tiles(r0, blockX = 4, blockY = 4)
+
+```
+
+But, if our raster has an dimension that doesn't divide neatly into the block size, 
+then there is some tile overlap. This should work for any raster dimension and any arbitrary tile size. 
+
+
+```{r dangle}
+r1 <- raster::raster(matrix(0, 13, 15), xmn = 0, xmx = 15, ymn = 0, ymx = 13)
+tiles(r1, 4, 4)
+
+```
+
 
 ```{r grid}
 
 r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
 
-library(tropo)
+
 (t1 <- tiles(r, blockX = 12, blockY = 12))
 plot(t1)
 

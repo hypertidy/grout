@@ -7,20 +7,20 @@
   blockY <- as.integer(blockY)
   if (dm[2L] <= blockX) {
     ntilesX <- 1L
-    dangleX <- (ntilesX * blockX) - dm[2L] 
   } else {
-    ntilesX <- (dm[2L] %/% blockX) + 1
-    dangleX <- blockX - (dm[2L] %% (ntilesX * blockX))
+    ntilesX <- (dm[2L] %/% blockX)
+    if (ntilesX * blockX < dm[2L]) ntilesX <- ntilesX + 1L  ## hack
   }
-
+  if (blockX == 1) ntilesX <- dm[2L]
+  dangleX <- (ntilesX * blockX) - dm[2L] 
   if (dm[1L] <= blockY) {
     ntilesY <- 1L
-    dangleY <- (ntilesY * blockY) - dm[1L] 
   } else {
-    ntilesY <- (dm[1L] %/% blockY) + 1
-    dangleY <- blockY - (dm[1L] %% (ntilesY * blockY)) 
+    ntilesY <- (dm[1L] %/% blockY)
   }
- 
+  if (ntilesY * blockY < dm[1L]) ntilesY <- ntilesY + 1  ## hack
+  if (blockY == 1) ntilesY <- dm[1L]
+  dangleY <- (ntilesY * blockY) - dm[1L] 
   structure(list(inputraster = raster::raster(x), 
        ntilesX = ntilesX, ntilesY = ntilesY, 
        dangleX = dangleX, dangleY = dangleY, 
@@ -76,13 +76,18 @@ tiles <- function(x, blockX = 256, blockY = 256) {
 print.tropo_tiles <- function(x, ...) { 
   dm <- dim(x$tileraster)
   ex <- raster::extent(x$tileraster)
-  cat(sprintf("tropo tiles: %i\n", prod(dm)))
-  cat(sprintf("    x tiles: %i\n", dm[2L]) )
-  cat(sprintf("    y tiles: %i\n", dm[1L]))
-  cat(sprintf("     blockX: %i\n", x$scheme$blockX) )
-  cat(sprintf("     blockY: %i\n", x$scheme$blockY))
-  
-  cat(sprintf("     dangle: %i,%i (x,y)\n", x$scheme$dangleX, x$scheme$dangleY))
+  cat(sprintf("          tiles: %i, %i (x * y = %i)\n",  dm[2L], dm[1L], prod(dm)) )
+  cat(sprintf("          block: %i, %i \n", x$scheme$blockX, x$scheme$blockY) )
+  cat(sprintf("         dangle: %i, %i \n", x$scheme$dangleX, x$scheme$dangleY))
+  rs <- raster::res(x$tileraster)
+  cat(sprintf("tile resolution: %s, %s \n", format(rs[1L]), format(rs[2L])))
+  cat(sprintf("    tile extent: %s, %s, %s, %s (xmin,xmax,ymin,ymax)\n", 
+              format(raster::xmin(ex)), 
+                     format(raster::xmax(ex)), 
+                            format(raster::ymin(ex)),
+                                   format(raster::ymax(ex))))
+  rg <- raster::res(x$scheme$inputraster)
+  cat(sprintf("          grain: %s, %s (%i : x, %i : y)", format(rg[1L]), format(rg[2L]), x$scheme$blockX, x$scheme$blockY))
   invisible(NULL)
 }
 
@@ -90,7 +95,8 @@ print.tropo_tiles <- function(x, ...) {
 #' 
 #' @param x a tropo [tiles()] object
 #' @param ... arguments passed to methods (particularly [sp::plot()])
-#'
+#' @param border the colour of the tile border (default grey)
+#' @param lwd the width of the tile border (default = 2)
 #' @importFrom graphics plot
 #' @export
 plot.tropo_tiles <- function(x, ..., border = "grey", lwd = 2) {
