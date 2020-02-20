@@ -47,7 +47,14 @@
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/hypertidy/tropo">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -65,6 +72,39 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#tropo" class="anchor"></a>tropo</h1></div>
 <p>Abstract tiling schemes.</p>
+<p>Given a grid, impose a tiling scheme. The dangle is how much overlap the tiles imply.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2"></a>r &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dv">30</span>, <span class="dv">44</span>), <span class="dt">xmn=</span> <span class="dv">0</span>,<span class="dt">xmx =</span> <span class="dv">4</span>, <span class="dt">ymn =</span> <span class="dv">0</span>, <span class="dt">ymx =</span> <span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tropo)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>(t1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tiles.html">tiles</a></span>(r, <span class="dt">blockX =</span> <span class="dv">12</span>, <span class="dt">blockY =</span> <span class="dv">12</span>))</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt; tropo tiles: 6</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt;     x tiles: 3</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt;     y tiles: 2</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;      blockX: 12</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt;      blockY: 12</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;      dangle: 8,6 (x,y)</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(t1)</span></code></pre></div>
+<p><img src="README-grid-1.png"></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2"></a>(t2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tiles.html">tiles</a></span>(volcano, <span class="dv">12</span>, <span class="dv">16</span>))</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; tropo tiles: 25</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;     x tiles: 5</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;     y tiles: 5</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;      blockX: 12</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;      blockY: 12</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;      dangle: 1,7 (x,y)</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(t2)</span></code></pre></div>
+<p><img src="README-grid-2.png"></p>
+<p>We can generate polygons from these.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>p &lt;-<span class="st"> </span><span class="kw"><a href="reference/as_polys.html">as_polys</a></span>(t1)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a>sp<span class="op">::</span><span class="kw">plot</span>(p)</span></code></pre></div>
+<p><img src="README-poly-1.png"></p>
+<p>Or just plot the scheme.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(t1)</span></code></pre></div>
+<p><img src="README-plot-1.png"></p>
 <hr>
 <p>Please note that the ‘tropo’ project is released with a <a href="https://github.com/hypertidy/tropo/blob/master/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
@@ -72,7 +112,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/hypertidy/tropo">https://​github.com/​hypertidy/​tropo</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/hypertidy/tropo/issues">https://​github.com/​hypertidy/​tropo/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>

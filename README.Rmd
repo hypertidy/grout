@@ -2,6 +2,8 @@
 output:
   md_document:
     variant: markdown_github
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -24,6 +26,37 @@ knitr::opts_chunk$set(
 # tropo
 
 Abstract tiling schemes. 
+
+
+Given a grid, impose a tiling scheme. The dangle is how much overlap the tiles imply. 
+
+```{r grid}
+
+r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
+
+library(tropo)
+(t1 <- tiles(r, blockX = 12, blockY = 12))
+plot(t1)
+
+(t2 <- tiles(volcano, 12, 16))
+
+plot(t2)
+```
+
+We can generate polygons from these. 
+
+```{r poly}
+p <- as_polys(t1)
+
+sp::plot(p)
+```
+
+Or just plot the scheme. 
+
+```{r plot}
+plot(t1)
+```
+
 
 ---
 
