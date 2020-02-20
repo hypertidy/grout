@@ -8,6 +8,14 @@
 \description{
 Create raster tiles abstractly, or from large input files.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/hypertidy/tropo}
+  \item Report bugs at \url{https://github.com/hypertidy/tropo/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Michael D. Sumner \email{mdsumner@gmail.com}
 

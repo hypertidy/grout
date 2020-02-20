@@ -7,18 +7,18 @@
   blockY <- as.integer(blockY)
   if (dm[2L] <= blockX) {
     ntilesX <- 1L
-    dangleX <- blockX - dm[2L] 
+    dangleX <- (ntilesX * blockX) - dm[2L] 
   } else {
-    ntilesX <- dm[2L] %/% blockX
-    dangleX <- dm[2L] %% blockX
+    ntilesX <- (dm[2L] %/% blockX) + 1
+    dangleX <- blockX - (dm[2L] %% (ntilesX * blockX))
   }
 
   if (dm[1L] <= blockY) {
     ntilesY <- 1L
-    dangleY <- blockY - dm[1L] 
+    dangleY <- (ntilesY * blockY) - dm[1L] 
   } else {
-    ntilesY <- dm[1L] %/% blockY
-    dangleY <- dm[1L] %%  blockY
+    ntilesY <- (dm[1L] %/% blockY) + 1
+    dangleY <- blockY - (dm[1L] %% (ntilesY * blockY)) 
   }
  
   structure(list(inputraster = raster::raster(x), 
@@ -31,8 +31,8 @@
 
 extent.tropo_tilescheme <- function(x) {
   raster::extent(raster::xmin(x$inputraster), 
-                 raster::xmax(x$inputraster) +  (x$blockX - x$dangleX) * raster::res(x$inputraster)[1], 
-                 raster::ymin(x$inputraster) -  (x$blockY - x$dangleY) * raster::res(x$inputraster)[2], 
+                 raster::xmin(x$inputraster) +  (x$blockX *  x$ntilesX) * raster::res(x$inputraster)[1], 
+                 raster::ymax(x$inputraster) -  (x$blockY *  x$ntilesY) * raster::res(x$inputraster)[2], 
                  raster::ymax(x$inputraster) )
 }
 
@@ -80,7 +80,7 @@ print.tropo_tiles <- function(x, ...) {
   cat(sprintf("    x tiles: %i\n", dm[2L]) )
   cat(sprintf("    y tiles: %i\n", dm[1L]))
   cat(sprintf("     blockX: %i\n", x$scheme$blockX) )
-  cat(sprintf("     blockY: %i\n", x$scheme$blockX))
+  cat(sprintf("     blockY: %i\n", x$scheme$blockY))
   
   cat(sprintf("     dangle: %i,%i (x,y)\n", x$scheme$dangleX, x$scheme$dangleY))
   invisible(NULL)
@@ -93,8 +93,8 @@ print.tropo_tiles <- function(x, ...) {
 #'
 #' @importFrom graphics plot
 #' @export
-plot.tropo_tiles <- function(x, ...) {
-  sp::plot(as_polys(x), ...)
+plot.tropo_tiles <- function(x, ..., border = "grey", lwd = 2) {
+  sp::plot(as_polys(x), ..., border = border, lwd = lwd)
   raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
   invisible(NULL)
 }
