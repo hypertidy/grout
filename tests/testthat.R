@@ -1,4 +1,4 @@
 library(testthat)
-library(tropo)
+library(grout)
 
-test_check("tropo")
+test_check("grout")

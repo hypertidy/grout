@@ -1,4 +1,4 @@
-Package: tropo
+Package: grout
 Title: Create Raster Tiles
 Version: 0.0.2
 Authors@R: person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre"))
@@ -14,5 +14,5 @@ Imports:
     raster,
     sp,
     methods
-URL: https://github.com/hypertidy/tropo
-BugReports: https://github.com/hypertidy/tropo/issues
+URL: https://github.com/hypertidy/grout
+BugReports: https://github.com/hypertidy/grout/issues

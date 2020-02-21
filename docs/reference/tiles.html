@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>tiles of a raster — tiles • tropo</title>
+<title>tiles of a raster — tiles • grout</title>
 
 
 <!-- jquery -->
@@ -68,7 +68,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">tropo</a>
+        <a class="navbar-link" href="../index.html">grout</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
@@ -87,7 +87,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hypertidy/tropo">
+  <a href="https://github.com/hypertidy/grout">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -106,7 +106,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>tiles of a raster</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hypertidy/tropo/blob/master/R/tropo.R'><code>R/tropo.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hypertidy/grout/blob/master/R/tropo.R'><code>R/tropo.R</code></a></small>
     <div class="hidden name"><code>tiles.Rd</code></div>
     </div>
 
@@ -138,7 +138,7 @@
     <p>A raster layer with cells having the tile number and extent releant to the input.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>rv</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tropo</span><span class='kw ns'>:::</span><span class='fu'>raster0</span>(<span class='no'>volcano</span>)
+    <pre class="examples"><div class='input'><span class='no'>rv</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>grout</span><span class='kw ns'>:::</span><span class='fu'>raster0</span>(<span class='no'>volcano</span>)
 <span class='co'>## one (too) big tile</span>
 <span class='no'>tile</span> <span class='kw'>&lt;-</span> <span class='fu'>tiles</span>(<span class='no'>rv</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>tile</span>)</div><div class='input'><span class='no'>tile</span></div><div class='output co'>#&gt;           tiles: 1, 1 (x * y = 1)

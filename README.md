@@ -4,16 +4,16 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/hypertidy/tropo.svg?branch=master)](https://travis-ci.org/hypertidy/tropo)
+status](https://travis-ci.org/hypertidy/grout.svg?branch=master)](https://travis-ci.org/hypertidy/grout)
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/hypertidy/tropo?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/tropo)
+status](https://ci.appveyor.com/api/projects/status/github/hypertidy/grout?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/grout)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/tropo)](https://CRAN.R-project.org/package=tropo)
+status](https://www.r-pkg.org/badges/version/grout)](https://CRAN.R-project.org/package=grout)
 <!-- badges: end -->
 
-# tropo
+# grout
 
 Abstract tiling schemes.
 
@@ -25,7 +25,7 @@ We use the term “block” to refer to the size of each tile in pixels.
 Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap.
 
 ``` r
-library(tropo)
+library(grout)
 r0 <- raster::raster(matrix(0, 12, 16), xmn = 0, xmx = 16, ymn = 0, ymx = 12)
 tiles(r0, blockX = 4, blockY = 4)
 #>           tiles: 4, 3 (x * y = 12)
@@ -101,9 +101,26 @@ plot(t1)
 
 ![](man/figures/README-plot-1.png)<!-- -->
 
+## Why even do this? (seriously, waat)
+
+Consider a very large raster source.
+
+This one the [Mars MGS MOLA - MEX HRSC Blended DEM Global 200m
+v2](https://astrogeology.usgs.gov/search/map/Mars/Topography/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2)
+is about 11Gb, in GeoTIFF.
+
+``` r
+u <- "https://planetarymaps.usgs.gov/mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif"
+## note prefix with GDAL's URL indirection
+mars <- file.path("/vsicurl", u)
+r <- raster::raster(mars)
+library(grout)
+tl <- tiles(r)
+```
+
 -----
 
-Please note that the ‘tropo’ project is released with a [Contributor
+Please note that the ‘grout’ project is released with a [Contributor
 Code of
-Conduct](https://github.com/hypertidy/tropo/blob/master/CODE_OF_CONDUCT.md).
+Conduct](https://github.com/hypertidy/grout/blob/master/CODE_OF_CONDUCT.md).
 By contributing to this project, you agree to abide by its terms.

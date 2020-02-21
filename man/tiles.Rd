@@ -20,7 +20,7 @@ A raster layer with cells having the tile number and extent releant to the input
 tiles of a raster
 }
 \examples{
-rv <- tropo:::raster0(volcano)
+rv <- grout:::raster0(volcano)
 ## one (too) big tile
 tile <- tiles(rv)
 plot(tile)

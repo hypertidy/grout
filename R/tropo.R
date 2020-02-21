@@ -25,11 +25,11 @@
        ntilesX = ntilesX, ntilesY = ntilesY, 
        dangleX = dangleX, dangleY = dangleY, 
        blockX = blockX, blockY = blockY), 
-       class = "tropo_tilescheme")
+       class = "grout_tilescheme")
 
 }
 
-extent.tropo_tilescheme <- function(x) {
+extent.grout_tilescheme <- function(x) {
   raster::extent(raster::xmin(x$inputraster), 
                  raster::xmin(x$inputraster) +  (x$blockX *  x$ntilesX) * raster::res(x$inputraster)[1], 
                  raster::ymax(x$inputraster) -  (x$blockY *  x$ntilesY) * raster::res(x$inputraster)[2], 
@@ -46,7 +46,7 @@ extent.tropo_tilescheme <- function(x) {
 #' @export
 #'
 #' @examples
-#' rv <- tropo:::raster0(volcano)
+#' rv <- grout:::raster0(volcano)
 #' ## one (too) big tile
 #' tile <- tiles(rv)
 #' plot(tile)
@@ -62,18 +62,18 @@ extent.tropo_tilescheme <- function(x) {
 #' plot(tils, add = TRUE)
 tiles <- function(x, blockX = 256, blockY = 256) {
   ts <- .tilescheme(x, blockX = blockX, blockY = blockY)
-  rt <- raster::raster(extent.tropo_tilescheme(ts), 
+  rt <- raster::raster(extent.grout_tilescheme(ts), 
                        ncol = ts$ntilesX, nrow = ts$ntilesY)
   structure(list(tileraster = raster::setValues(rt, seq(raster::ncell(rt))),
                  scheme = ts),
-            class = "tropo_tiles")
+            class = "grout_tiles")
 }
 
 #' print tiles
-#' @param x a tropo [tiles()] object
+#' @param x a grout [tiles()] object
 #' @param ... ignored
 #' @export
-print.tropo_tiles <- function(x, ...) { 
+print.grout_tiles <- function(x, ...) { 
   dm <- dim(x$tileraster)
   ex <- raster::extent(x$tileraster)
   cat(sprintf("          tiles: %i, %i (x * y = %i)\n",  dm[2L], dm[1L], prod(dm)) )
@@ -93,13 +93,13 @@ print.tropo_tiles <- function(x, ...) {
 
 #' plot tiles
 #' 
-#' @param x a tropo [tiles()] object
+#' @param x a grout [tiles()] object
 #' @param ... arguments passed to methods (particularly [sp::plot()])
 #' @param border the colour of the tile border (default grey)
 #' @param lwd the width of the tile border (default = 2)
 #' @importFrom graphics plot
 #' @export
-plot.tropo_tiles <- function(x, ..., border = "grey", lwd = 2) {
+plot.grout_tiles <- function(x, ..., border = "grey", lwd = 2) {
   sp::plot(as_polys(x), ..., border = border, lwd = lwd)
   raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
   invisible(NULL)
@@ -108,7 +108,7 @@ plot.tropo_tiles <- function(x, ..., border = "grey", lwd = 2) {
 
 #' Tiles as polygons
 #' 
-#' @param x a tropo [tiles()] object 
+#' @param x a grout [tiles()] object 
 #' @param ... ignored
 #'
 #' @export
@@ -118,7 +118,7 @@ as_polys <- function(x, ...) {
 #' @name as_polys
 #' @importFrom methods as
 #' @export
-as_polys.tropo_tiles <- function(x, ...) {
+as_polys.grout_tiles <- function(x, ...) {
   pp <- as(x$tileraster, "SpatialPolygonsDataFrame")
   pp$tile <- seq(raster::ncell(x$tileraster))
   pp$layer <- NULL

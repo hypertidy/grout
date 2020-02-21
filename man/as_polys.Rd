@@ -2,15 +2,15 @@
 % Please edit documentation in R/tropo.R
 \name{as_polys}
 \alias{as_polys}
-\alias{as_polys.tropo_tiles}
+\alias{as_polys.grout_tiles}
 \title{Tiles as polygons}
 \usage{
 as_polys(x, ...)
 
-\method{as_polys}{tropo_tiles}(x, ...)
+\method{as_polys}{grout_tiles}(x, ...)
 }
 \arguments{
-\item{x}{a tropo [tiles()] object}
+\item{x}{a grout [tiles()] object}
 
 \item{...}{ignored}
 }
