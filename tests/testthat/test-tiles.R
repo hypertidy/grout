@@ -41,7 +41,9 @@ test_that("tiles works", {
                c(1L, 1L, 0L, 0L, 6002L, 5001L))
   
   
-  
+  ## internal template should not store values (light raster)
+  expect_true(!raster::hasValues(tiles(r4)$tileraster))
+  expect_true(!raster::hasValues(tiles(r4)$scheme$inputraster))
 })
 
 test_that("coercion works", {

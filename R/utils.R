@@ -9,7 +9,7 @@ raster0 <- function (x, transpose = TRUE) {
     x <- t(x[, raster::ncol(x):1])
     
   }
-  raster::setExtent(raster::raster(x), e)
+  raster::raster(raster::setExtent(raster::raster(x), e))
 }
 
 

@@ -46,7 +46,8 @@ extent.grout_tilescheme <- function(x) {
 #' @export
 #'
 #' @examples
-#' rv <- grout:::raster0(volcano)
+#' rv <- raster::raster(volcano, xmn = 0, xmx = nrow(volcano), 
+#'                               ymn = 0, ymx = ncol(volcano))
 #' ## one (too) big tile
 #' tile <- tiles(rv)
 #' plot(tile)
@@ -64,7 +65,7 @@ tiles <- function(x, blockX = 256, blockY = 256) {
   ts <- .tilescheme(x, blockX = blockX, blockY = blockY)
   rt <- raster::raster(extent.grout_tilescheme(ts), 
                        ncol = ts$ntilesX, nrow = ts$ntilesY)
-  structure(list(tileraster = raster::setValues(rt, seq(raster::ncell(rt))),
+  structure(list(tileraster = rt,
                  scheme = ts),
             class = "grout_tiles")
 }

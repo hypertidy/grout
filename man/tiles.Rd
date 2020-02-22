@@ -20,7 +20,8 @@ A raster layer with cells having the tile number and extent releant to the input
 tiles of a raster
 }
 \examples{
-rv <- grout:::raster0(volcano)
+rv <- raster::raster(volcano, xmn = 0, xmx = nrow(volcano), 
+                              ymn = 0, ymx = ncol(volcano))
 ## one (too) big tile
 tile <- tiles(rv)
 plot(tile)
