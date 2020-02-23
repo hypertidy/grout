@@ -2,22 +2,30 @@
 % Please edit documentation in R/tropo.R
 \name{tiles}
 \alias{tiles}
-\title{tiles of a raster}
+\title{Create a tiling scheme from a raster}
 \usage{
 tiles(x, blockX = 256, blockY = 256)
 }
 \arguments{
-\item{x}{a raster}
+\item{x}{a raster, or a matrix}
 
 \item{blockX}{tile dimensions in columns (X)}
 
 \item{blockY}{tile diemnsions in rows (Y)}
 }
 \value{
-A raster layer with cells having the tile number and extent releant to the input.
+A "tile scheme" object with information about the tile spacing and extent.
 }
 \description{
-tiles of a raster
+The input may be an actual raster or a matrix. There is an assumed
+block size of 256x256, and the scheme will record the number of tiles
+in each dimension and the amount of "overlapping dangle" when the dimensions
+of the data don't fit neatly within the tiles.
+}
+\details{
+The tile scheme object has print and plot methods for basic information. 
+
+See function [as_polys()] to generate tiles from the scheme.
 }
 \examples{
 rv <- raster::raster(volcano, xmn = 0, xmx = nrow(volcano), 

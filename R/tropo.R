@@ -36,13 +36,21 @@ extent.grout_tilescheme <- function(x) {
                  raster::ymax(x$inputraster) )
 }
 
-#' tiles of a raster
+#' Create a tiling scheme from a raster
 #'
-#' @param x a raster
+#' The input may be an actual raster or a matrix. There is an assumed
+#' block size of 256x256, and the scheme will record the number of tiles
+#' in each dimension and the amount of "overlapping dangle" when the dimensions
+#' of the data don't fit neatly within the tiles. 
+#' 
+#' The tile scheme object has print and plot methods for basic information. 
+#' 
+#' See function [as_polys()] to generate tiles from the scheme. 
+#' @param x a raster, or a matrix
 #' @param blockX tile dimensions in columns (X)
 #' @param blockY tile diemnsions in rows (Y)
 #'
-#' @return A raster layer with cells having the tile number and extent releant to the input. 
+#' @return A "tile scheme" object with information about the tile spacing and extent. 
 #' @export
 #'
 #' @examples

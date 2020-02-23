@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>tiles of a raster — tiles • grout</title>
+<title>Create a tiling scheme from a raster — tiles • grout</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,11 @@
 
 
 
-<meta property="og:title" content="tiles of a raster — tiles" />
-<meta property="og:description" content="tiles of a raster" />
+<meta property="og:title" content="Create a tiling scheme from a raster — tiles" />
+<meta property="og:description" content="The input may be an actual raster or a matrix. There is an assumed
+block size of 256x256, and the scheme will record the number of tiles
+in each dimension and the amount of &quot;overlapping dangle&quot; when the dimensions
+of the data don't fit neatly within the tiles." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -105,13 +108,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>tiles of a raster</h1>
+    <h1>Create a tiling scheme from a raster</h1>
     <small class="dont-index">Source: <a href='https://github.com/hypertidy/grout/blob/master/R/tropo.R'><code>R/tropo.R</code></a></small>
     <div class="hidden name"><code>tiles.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>tiles of a raster</p>
+    <p>The input may be an actual raster or a matrix. There is an assumed
+block size of 256x256, and the scheme will record the number of tiles
+in each dimension and the amount of "overlapping dangle" when the dimensions
+of the data don't fit neatly within the tiles.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tiles</span>(<span class='no'>x</span>, <span class='kw'>blockX</span> <span class='kw'>=</span> <span class='fl'>256</span>, <span class='kw'>blockY</span> <span class='kw'>=</span> <span class='fl'>256</span>)</pre>
@@ -121,7 +127,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a raster</p></td>
+      <td><p>a raster, or a matrix</p></td>
     </tr>
     <tr>
       <th>blockX</th>
@@ -135,18 +141,23 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A raster layer with cells having the tile number and extent releant to the input.</p>
+    <p>A "tile scheme" object with information about the tile spacing and extent.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The tile scheme object has print and plot methods for basic information.</p>
+<p>See function [as_polys()] to generate tiles from the scheme.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>rv</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>grout</span><span class='kw ns'>:::</span><span class='fu'>raster0</span>(<span class='no'>volcano</span>)
+    <pre class="examples"><div class='input'><span class='no'>rv</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a></span>(<span class='no'>volcano</span>, <span class='kw'>xmn</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>xmx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>volcano</span>),
+                              <span class='kw'>ymn</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>ymx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>volcano</span>))
 <span class='co'>## one (too) big tile</span>
 <span class='no'>tile</span> <span class='kw'>&lt;-</span> <span class='fu'>tiles</span>(<span class='no'>rv</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>tile</span>)</div><div class='input'><span class='no'>tile</span></div><div class='output co'>#&gt;           tiles: 1, 1 (x * y = 1)
 #&gt;           block: 256, 256 
 #&gt;          dangle: 195, 169 
-#&gt; tile resolution: 256, 256 
-#&gt;     tile extent: 0, 256, -169, 87 (xmin,xmax,ymin,ymax)
-#&gt;           grain: 1, 1 (256 : x, 256 : y)</div><div class='input'>
+#&gt; tile resolution: 365.1148, 179.4943 
+#&gt;     tile extent: 0, 365.1148, -118.4943, 61 (xmin,xmax,ymin,ymax)
+#&gt;           grain: 1.42623, 0.7011494 (256 : x, 256 : y)</div><div class='input'>
 <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/image.html'>image</a></span>(<span class='no'>rv</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>1</span>); <span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>2</span>)</div><div class='img'><img src='tiles-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## more size appropriate</span>
 <span class='no'>tils</span> <span class='kw'>&lt;-</span> <span class='fu'>tiles</span>(<span class='no'>rv</span>, <span class='fl'>8</span>, <span class='fl'>8</span>)
@@ -157,6 +168,7 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

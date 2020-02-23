@@ -101,23 +101,6 @@ plot(t1)
 
 ![](man/figures/README-plot-1.png)<!-- -->
 
-## Why even do this? (seriously, waat)
-
-Consider a very large raster source.
-
-This one the [Mars MGS MOLA - MEX HRSC Blended DEM Global 200m
-v2](https://astrogeology.usgs.gov/search/map/Mars/Topography/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2)
-is about 11Gb, in GeoTIFF.
-
-``` r
-u <- "https://planetarymaps.usgs.gov/mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif"
-## note prefix with GDAL's URL indirection
-mars <- file.path("/vsicurl", u)
-r <- raster::raster(mars)
-library(grout)
-tl <- tiles(r)
-```
-
 -----
 
 Please note that the ‘grout’ project is released with a [Contributor

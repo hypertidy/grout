@@ -125,20 +125,8 @@
 <p>Or just plot the scheme.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(t1)</span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png"><!-- --></p>
-<div id="why-even-do-this-seriously-waat" class="section level2">
-<h2 class="hasAnchor">
-<a href="#why-even-do-this-seriously-waat" class="anchor"></a>Why even do this? (seriously, waat)</h2>
-<p>Consider a very large raster source.</p>
-<p>This one the <a href="https://astrogeology.usgs.gov/search/map/Mars/Topography/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2">Mars MGS MOLA - MEX HRSC Blended DEM Global 200m v2</a> is about 11Gb, in GeoTIFF.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>u &lt;-<span class="st"> "https://planetarymaps.usgs.gov/mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif"</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="co">## note prefix with GDAL's URL indirection</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>mars &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/vsicurl"</span>, u)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>r &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span>(mars)</span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(grout)</span>
-<span id="cb7-6"><a href="#cb7-6"></a>tl &lt;-<span class="st"> </span><span class="kw"><a href="reference/tiles.html">tiles</a></span>(r)</span></code></pre></div>
 <hr>
 <p>Please note that the ‘grout’ project is released with a <a href="https://github.com/hypertidy/grout/blob/master/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
-</div>
 </div>
 
   </div>

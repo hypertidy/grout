@@ -76,20 +76,7 @@ Or just plot the scheme.
 plot(t1)
 ```
 
-## Why even do this? (seriously, waat)
 
-Consider a very large raster source. 
-
-This one the [Mars MGS MOLA - MEX HRSC Blended DEM Global 200m v2](https://astrogeology.usgs.gov/search/map/Mars/Topography/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2) is about 11Gb, in GeoTIFF. 
-
-```{r mola}
-u <- "https://planetarymaps.usgs.gov/mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif"
-## note prefix with GDAL's URL indirection
-mars <- file.path("/vsicurl", u)
-r <- raster::raster(mars)
-library(grout)
-tl <- tiles(r)
-```
 
 
 ---
