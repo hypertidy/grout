@@ -125,8 +125,71 @@
 <p>Or just plot the scheme.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(t1)</span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png"><!-- --></p>
+<div id="what-for" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-for" class="anchor"></a>What for?</h2>
+<p>This gives us fine control over the exact nature of the data we can read from large sources.</p>
+<p>Consider this large image online:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>u &lt;-<span class="st"> "/vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif"</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a>im &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/brick.html">brick</a></span>(u)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>im</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; class      : RasterBrick </span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; dimensions : 27051, 27657, 748149507, 3  (nrow, ncol, ncell, nlayers)</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt; resolution : 0.8, 0.8  (x, y)</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt; extent     : 259537.6, 281663.2, 3195977, 3217618  (xmin, xmax, ymin, ymax)</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; source     : /vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif </span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; names      :   R,   G,   B </span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt; min values :   0,   0,   0 </span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; max values : 255, 255, 255</span></span></code></pre></div>
+<p>The raster reader gives us a useful brick object that can be operated with, if we crop it only those cell values are read - but we have no idea about the underlying tiling of the data source itself.</p>
+<p>With GDAL more directly we can find the underlying tile structure, which tells us about the 256x256 tiling scheme.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>info &lt;-<span class="st"> </span>vapour<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/vapour/man/vapour_raster_info.html">vapour_raster_info</a></span>(u)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>info[<span class="st">"tilesXY"</span>]</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; $tilesXY</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; [1] 256 256</span></span></code></pre></div>
+<p>Now with grout we can actually generate the tile scheme and work with it, let’s say we know that we want a region near tile number 6500. Using the raster version of the tiles we can find the adjacent tile cell numbers, then use that to crop the original source.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>(tile0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tiles.html">tiles</a></span>(im, info<span class="op">$</span>tilesXY[<span class="dv">1</span>], info<span class="op">$</span>tilesXY[<span class="dv">2</span>]))</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt;           tiles: 109, 106 (x * y = 11554)</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;           block: 256, 256 </span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;          dangle: 247, 85 </span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; tile resolution: 204.8, 204.8 </span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;     tile extent: 259537.6, 281860.8, 3195909, 3217618 (xmin,xmax,ymin,ymax)</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;           grain: 0.8, 0.8 (256 : x, 256 : y)</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a></span>
+<span id="cb9-9"><a href="#cb9-9"></a>polys &lt;-<span class="st"> </span><span class="kw"><a href="reference/as_polys.html">as_polys</a></span>(tile0)</span>
+<span id="cb9-10"><a href="#cb9-10"></a>cells &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/adjacent.html">adjacent</a></span>(tile0<span class="op">$</span>tileraster, <span class="dv">6500</span>, <span class="dt">include =</span> <span class="ot">TRUE</span>, <span class="dt">directions =</span> <span class="dv">8</span>)[, <span class="st">"to"</span>]</span>
+<span id="cb9-11"><a href="#cb9-11"></a>rr &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/crop.html">crop</a></span>(im, polys[cells, ])</span></code></pre></div>
+<p>Finally, we have an in-memory raster of the original source data for very specific tiles.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>rr</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; class      : RasterBrick </span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; dimensions : 768, 768, 589824, 3  (nrow, ncol, ncell, nlayers)</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; resolution : 0.8, 0.8  (x, y)</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; extent     : 273259.2, 273873.6, 3205125, 3205739  (xmin, xmax, ymin, ymax)</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; source     : memory</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; names      :   R,   G,   B </span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; min values :  25,  28,   2 </span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; max values : 238, 246, 250</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/plotRGB.html">plotRGB</a></span>(rr)</span>
+<span id="cb10-13"><a href="#cb10-13"></a>sp<span class="op">::</span><span class="kw">plot</span>(polys[cells, ], <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">"firebrick"</span>)</span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="kw"><a href="https://rdrr.io/r/graphics/text.html">text</a></span>(sp<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(polys[cells, ]), <span class="dt">lab =</span> cells, <span class="dt">col =</span> <span class="st">"yellow"</span>)</span></code></pre></div>
+<p><img src="reference/figures/README-specific-1.png"><!-- --></p>
+</div>
+<div id="todo" class="section level2">
+<h2 class="hasAnchor">
+<a href="#todo" class="anchor"></a>TODO</h2>
+<ul>
+<li>remove need for using sp polygons</li>
+<li>set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))</li>
+<li>remove use of sp and raster internally for the data structures, just store the information about the grid/s</li>
+</ul>
 <hr>
 <p>Please note that the ‘grout’ project is released with a <a href="https://github.com/hypertidy/grout/blob/master/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
 </div>
 
   </div>

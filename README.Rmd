@@ -76,7 +76,56 @@ Or just plot the scheme.
 plot(t1)
 ```
 
+## What for? 
 
+This gives us fine control over the exact nature of the data we can read from large sources. 
+
+Consider this large image online: 
+
+```{r large}
+u <- "/vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif"
+
+im <- raster::brick(u)
+im
+```
+
+The raster reader gives us a useful brick object that can be operated with, if we crop it only those 
+cell values are read - but we have no idea about the underlying tiling of the data source itself. 
+
+With GDAL more directly we can find the underlying tile structure, which tells us about the 256x256 tiling
+scheme. 
+
+```{r tile}
+info <- vapour::vapour_raster_info(u)
+
+info["tilesXY"]
+```
+
+Now with grout we can actually generate the tile scheme and work with it, let's say we know that we want a region near tile number 6500. Using the raster version of the tiles we can find the adjacent tile cell numbers, then use that to crop the original source. 
+
+```{r scheme}
+(tile0 <- tiles(im, info$tilesXY[1], info$tilesXY[2]))
+
+polys <- as_polys(tile0)
+cells <- raster::adjacent(tile0$tileraster, 6500, include = TRUE, directions = 8)[, "to"]
+rr <- raster::crop(im, polys[cells, ])
+```
+
+Finally, we have an in-memory raster of the original source data for very specific tiles. 
+
+```{r specific}
+rr
+
+raster::plotRGB(rr)
+sp::plot(polys[cells, ], add = TRUE, border = "firebrick")
+text(sp::coordinates(polys[cells, ]), lab = cells, col = "yellow")
+```
+
+## TODO
+
+* remove need for using sp polygons
+* set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))
+* remove use of sp and raster internally for the data structures, just store the information about the grid/s
 
 
 ---
