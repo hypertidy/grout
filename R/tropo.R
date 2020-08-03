@@ -113,8 +113,26 @@ plot.grout_tiles <- function(x, ..., border = "grey", lwd = 2) {
   raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
   invisible(NULL)
 }
-
-
+#' @name as_rect
+#' @export
+as_rect <- function(x, ...) {
+  UseMethod("as_rect")
+}
+.p2s <- function(x) {
+  cbind(vx0 = x[-length(x)],
+  .vx1 = x[-1L])
+} 
+#' @name as_rect
+#' @export
+as_rect.grout_tiles <- function(x, ...) {
+  xx <- seq(raster::xmin(x$tileraster), raster::xmax(x$tileraster), length = ncol(x$tileraster) + 1L)
+  yy <- seq(raster::ymin(x$tileraster), raster::ymax(x$tileraster), length = nrow(x$tileraster) + 1L)
+ 
+  idx <- .p2s(seq_along(xx))
+  idy <- .p2s(seq_along(yy))
+  tibble::as_tibble(cbind(expand.grid(x0 = xx[idx[,1L]], y0 = yy[idy[,1L]]), 
+                 expand.grid(x1 = xx[idx[,2L]], y1 = yy[idy[,2L]])))
+}
 #' Tiles as polygons
 #' 
 #' @param x a grout [tiles()] object 

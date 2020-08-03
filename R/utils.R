@@ -13,15 +13,4 @@ raster0 <- function (x, transpose = TRUE) {
 }
 
 
-# .halfactors <- function(n) {
-#  2 ^ (seq(trunc(log(n%/%2, 2))))
-# 
-# }
-# 
-# .bestfactors <- function(n, minblock = 4) {
-#   ss <- .halfactors(n)
-#   sq <- seq(n)
-#   sq <- sq[(n / (sq )) == (n %/% (sq))]
-#   list(ss, sq)
-# }
 
