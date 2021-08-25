@@ -1,16 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/hypertidy/grout.svg?branch=master)](https://travis-ci.org/hypertidy/grout)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/hypertidy/grout?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/grout)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/grout)](https://CRAN.R-project.org/package=grout)
+[![R-CMD-check](https://github.com/hypertidy/grout/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/grout/actions)
 <!-- badges: end -->
 
 # grout
@@ -52,7 +48,6 @@ tiles(r1, 4, 4)
 ```
 
 ``` r
-
 r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
 
 
@@ -69,7 +64,6 @@ plot(t1)
 ![](man/figures/README-grid-1.png)<!-- -->
 
 ``` r
-
 (t2 <- tiles(volcano, 12, 16))
 #>           tiles: 6, 6 (x * y = 36)
 #>           block: 12, 16 
@@ -82,6 +76,27 @@ plot(t2)
 ```
 
 ![](man/figures/README-grid-2.png)<!-- -->
+
+We can generate a table of offset indexes, for use in reading from GDAL
+(say).
+
+``` r
+tile_index(t2)
+#> # A tibble: 36 × 5
+#>     tile offset_x offset_y  ncol  nrow
+#>    <int>    <dbl>    <dbl> <int> <dbl>
+#>  1     1        0        0    12    16
+#>  2     2        1        0    12    16
+#>  3     3        2        0    12    16
+#>  4     4        3        0    12    16
+#>  5     5        4        0    12    16
+#>  6     6        5        0    11    16
+#>  7     7        0        1    12    16
+#>  8     8        1        1    12    16
+#>  9     9        2        1    12    16
+#> 10    10        3        1    12    16
+#> # … with 26 more rows
+```
 
 We can generate polygons from these.
 
@@ -117,8 +132,8 @@ im
 #> dimensions : 27051, 27657, 748149507, 3  (nrow, ncol, ncell, nlayers)
 #> resolution : 0.8, 0.8  (x, y)
 #> extent     : 259537.6, 281663.2, 3195977, 3217618  (xmin, xmax, ymin, ymax)
-#> crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
-#> source     : /vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif 
+#> crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs 
+#> source     : SkySat_Freeport_s03_20170831T162740Z3.tif 
 #> names      :   R,   G,   B 
 #> min values :   0,   0,   0 
 #> max values : 255, 255, 255
@@ -167,7 +182,7 @@ rr
 #> dimensions : 768, 768, 589824, 3  (nrow, ncol, ncell, nlayers)
 #> resolution : 0.8, 0.8  (x, y)
 #> extent     : 273259.2, 273873.6, 3205125, 3205739  (xmin, xmax, ymin, ymax)
-#> crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs 
 #> source     : memory
 #> names      :   R,   G,   B 
 #> min values :  25,  28,   2 
@@ -182,15 +197,17 @@ text(sp::coordinates(polys[cells, ]), lab = cells, col = "yellow")
 
 ## TODO
 
-  - remove need for using sp polygons
-  - set tools for cropping that use the index, not spatial extent
+-   remove need for using sp polygons
+-   set tools for cropping that use the index, not spatial extent
     (i.e. extent(x, x0, x1, y0, y1))
-  - remove use of sp and raster internally for the data structures, just
+-   remove use of sp and raster internally for the data structures, just
     store the information about the grid/s
 
------
+------------------------------------------------------------------------
 
-Please note that the ‘grout’ project is released with a [Contributor
-Code of
-Conduct](https://github.com/hypertidy/grout/blob/master/CODE_OF_CONDUCT.md).
+## Code of Conduct
+
+Please note that the grout project is released with a [Contributor Code
+of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.

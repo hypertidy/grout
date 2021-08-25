@@ -14,10 +14,9 @@ knitr::opts_chunk$set(
 ```
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/hypertidy/grout.svg?branch=master)](https://travis-ci.org/hypertidy/grout)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/hypertidy/grout?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/grout)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/grout)](https://CRAN.R-project.org/package=grout)
+[![R-CMD-check](https://github.com/hypertidy/grout/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/grout/actions)
 <!-- badges: end -->
   
 # grout
@@ -60,6 +59,12 @@ plot(t1)
 (t2 <- tiles(volcano, 12, 16))
 
 plot(t2)
+```
+
+We can generate a table of offset indexes, for use in reading from GDAL (say). 
+
+```{r offsets}
+tile_index(t2)
 ```
 
 We can generate polygons from these. 
@@ -130,6 +135,7 @@ text(sp::coordinates(polys[cells, ]), lab = cells, col = "yellow")
 
 ---
 
-Please note that the 'grout' project is released with a
-[Contributor Code of Conduct](https://github.com/hypertidy/grout/blob/master/CODE_OF_CONDUCT.md).
-By contributing to this project, you agree to abide by its terms.
+
+## Code of Conduct
+  
+Please note that the grout project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
