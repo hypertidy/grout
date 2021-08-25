@@ -1,6 +1,6 @@
 Package: grout
 Title: Create Raster Tiles
-Version: 0.0.2
+Version: 0.0.2.9001
 Authors@R: person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre"))
 Description: Create raster tiles abstractly, or from large input files. 
 Depends:
@@ -10,9 +10,11 @@ LazyData: true
 Suggests:
     testthat (>= 2.1.0)
 RoxygenNote: 7.1.1
+Encoding: UTF-8
 Imports: 
     raster,
     sp,
-    methods
+    methods,
+    tibble
 URL: https://github.com/hypertidy/grout
 BugReports: https://github.com/hypertidy/grout/issues
