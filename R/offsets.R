@@ -27,15 +27,16 @@ tile_index <- function(x) {
   scheme <- x$tileraster
   nc <- raster::ncell(scheme)
   tile <- seq_len(nc)
-  offsetX <- raster::colFromCell(scheme, tile) - 1
-  offsetY <- raster::rowFromCell(scheme, tile) - 1
+  offsetX <- (raster::colFromCell(scheme, tile) - 1) * x$scheme$blockX
+  offsetY <- (raster::rowFromCell(scheme, tile) - 1)   * x$scheme$blockY
   nX <- rep(x$scheme$blockX, nc)
   nY <- rep(x$scheme$blockY, nc)
+  
   if (x$scheme$dangleX > 0) {
-    nX[raster::cellFromCol(scheme, ncol(scheme))] <- x$scheme$dangleX
+    nX[raster::cellFromCol(scheme, ncol(scheme))] <- x$scheme$blockX - x$scheme$dangleX
   }
   if (x$scheme$dangleY > 0) {
-    nY[raster::cellFromRow(scheme, nrow(scheme))] <- x$scheme$dangleY
+    nY[raster::cellFromRow(scheme, nrow(scheme))] <- x$scheme$blockY - x$scheme$dangleY
   }
   tibble::tibble(tile = tile, offset_x = offsetX, offset_y = offsetY, ncol = nX, nrow = nY)
 }
