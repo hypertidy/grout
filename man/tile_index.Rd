@@ -23,6 +23,7 @@ A data frame with
 * **offset_y** - row offset of tile (index row 0-based, relative to top row)
 * **ncol** number of columns in tile (the right and bottom margins may have a dangle based on block size)
 * **nrow** number of rows in th tile 
+* xmin, xmax, ymin, ymax - the exent
 
 Note that ncol,nrow is the block size *unless* the tile is part of a dangling column or row (right or bottom) where
 the raster doesn't fill complete tiles.

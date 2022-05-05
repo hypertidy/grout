@@ -9,6 +9,7 @@
 #' * **offset_y** - row offset of tile (index row 0-based, relative to top row)
 #' * **ncol** number of columns in tile (the right and bottom margins may have a dangle based on block size)
 #' * **nrow** number of rows in th tile 
+#' * xmin, xmax, ymin, ymax - the exent
 #' 
 #' Note that ncol,nrow is the block size *unless* the tile is part of a dangling column or row (right or bottom) where
 #' the raster doesn't fill complete tiles. 
@@ -26,6 +27,7 @@
 #' tile_index(grout(volcano, c(61, 87)))
 tile_index <- function(x) {
   scheme <- x$tileraster
+  input <- x$scheme$inputraster
   nc <- prod(scheme$dimension)
   tile <- seq_len(nc)
   
@@ -34,11 +36,22 @@ tile_index <- function(x) {
   nX <- rep(x$scheme$blockX, nc)
   nY <- rep(x$scheme$blockY, nc)
   
+
+    
   if (x$scheme$dangleX > 0) {
     nX[cell_from_col(scheme$dimension, scheme$dimension[1L])] <- x$scheme$blockX - x$scheme$dangleX
   }
   if (x$scheme$dangleY > 0) {
     nY[cell_from_row(scheme$dimension, scheme$dimension[2L])] <- x$scheme$blockY - x$scheme$dangleY
   }
-  tibble::tibble(tile = tile, offset_x = offsetX, offset_y = offsetY, ncol = nX, nrow = nY)
+  
+    res <- diff(input$extent)[c(1, 3)] / input$dimension
+    minX <-   input$extent[1] + offsetX * res[1]
+    maxX  <-  input$extent[1] +  (offsetX + nX) * res[1]
+    minY <-   input$extent[4] +  (offsetY + nY)     * -res[2]
+    maxY <-   input$extent[4] +  offsetY * -res[2]
+
+    
+    
+  tibble::tibble(tile = tile, offset_x = offsetX, offset_y = offsetY, ncol = nX, nrow = nY, xmin = minX, xmax  = maxX, ymin = minY, ymax = maxY)
 }

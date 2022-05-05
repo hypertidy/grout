@@ -1,5 +1,7 @@
 # grout dev
 
+* Added extent (xmin,xmax, ymin, ymax ) to `tile_index()`. 
+
 * Removed use of raster for core parts, package not yet clear. We use {vaster} for
 basic extent and cell logic. No plotting atm. 
 
