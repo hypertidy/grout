@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">grout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -52,7 +48,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/hypertidy/grout/">
+  <a href="https://github.com/hypertidy/grout/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -71,16 +67,16 @@
   <div class="contents col-md-9">
 
 
-<div id="grout" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#grout" class="anchor"></a>grout</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="grout">grout<a class="anchor" aria-label="anchor" href="#grout"></a>
+</h1></div>
 <p>Abstract tiling schemes.</p>
 <p>Given a grid, impose a tiling scheme. The dangle is overlap the tiles impose (in pixels).</p>
 <p>We use the term “block” to refer to the size of each tile in pixels.</p>
 <p>Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/grout">grout</a></span><span class="op">)</span>
-<span class="va">r0</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">16</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/grout" class="external-link">grout</a></span><span class="op">)</span>
+<span class="va">r0</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">16</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
 <span class="fu"><a href="reference/tiles.html">tiles</a></span><span class="op">(</span><span class="va">r0</span>, blockX <span class="op">=</span> <span class="fl">4</span>, blockY <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="co">#&gt;           tiles: 4, 3 (x * y = 12)</span>
 <span class="co">#&gt;           block: 4, 4 </span>
@@ -90,7 +86,7 @@
 <span class="co">#&gt;           grain: 1, 1 (4 : x, 4 : y)</span></code></pre></div>
 <p>But, if our raster has an dimension that doesn’t divide neatly into the block size, then there is some tile overlap. This should work for any raster dimension and any arbitrary tile size.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span>, <span class="fl">15</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">15</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span>, <span class="fl">15</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">15</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>
 <span class="fu"><a href="reference/tiles.html">tiles</a></span><span class="op">(</span><span class="va">r1</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>
 <span class="co">#&gt;           tiles: 4, 4 (x * y = 16)</span>
 <span class="co">#&gt;           block: 4, 4 </span>
@@ -99,7 +95,7 @@
 <span class="co">#&gt;     tile extent: 0, 16, -3, 13 (xmin,xmax,ymin,ymax)</span>
 <span class="co">#&gt;           grain: 1, 1 (4 : x, 4 : y)</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="fl">30</span>, <span class="fl">44</span><span class="op">)</span>, xmn<span class="op">=</span> <span class="fl">0</span>,xmx <span class="op">=</span> <span class="fl">4</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="fl">30</span>, <span class="fl">44</span><span class="op">)</span>, xmn<span class="op">=</span> <span class="fl">0</span>,xmx <span class="op">=</span> <span class="fl">4</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
 
 <span class="op">(</span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tiles.html">tiles</a></span><span class="op">(</span><span class="va">r</span>, blockX <span class="op">=</span> <span class="fl">12</span>, blockY <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span>
@@ -109,7 +105,7 @@
 <span class="co">#&gt; tile resolution: 1.090909, 1.2 </span>
 <span class="co">#&gt;     tile extent: 0, 4.363636, -0.6, 3 (xmin,xmax,ymin,ymax)</span>
 <span class="co">#&gt;           grain: 0.09090909, 0.1 (12 : x, 12 : y)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-grid-1.png"><!-- --></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tiles.html">tiles</a></span><span class="op">(</span><span class="va">volcano</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span>
@@ -120,7 +116,7 @@
 <span class="co">#&gt;     tile extent: 0, 1.180328, -0.1034483, 1 (xmin,xmax,ymin,ymax)</span>
 <span class="co">#&gt;           grain: 0.01639344, 0.01149425 (12 : x, 16 : y)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-grid-2.png"><!-- --></p>
 <p>We can generate a table of offset indexes, for use in reading from GDAL (say).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -147,17 +143,17 @@
 <p><img src="reference/figures/README-poly-1.png"><!-- --></p>
 <p>Or just plot the scheme.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png"><!-- --></p>
-<div id="what-for" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-for" class="anchor"></a>What for?</h2>
+<div class="section level2">
+<h2 id="what-for">What for?<a class="anchor" aria-label="anchor" href="#what-for"></a>
+</h2>
 <p>This gives us fine control over the exact nature of the data we can read from large sources.</p>
 <p>Consider this large image online:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">u</span> <span class="op">&lt;-</span> <span class="st">"/vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif"</span>
 
-<span class="va">im</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/brick.html">brick</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span>
+<span class="va">im</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/brick.html" class="external-link">brick</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span>
 <span class="va">im</span>
 <span class="co">#&gt; class      : RasterBrick </span>
 <span class="co">#&gt; dimensions : 27051, 27657, 748149507, 3  (nrow, ncol, ncell, nlayers)</span>
@@ -187,8 +183,8 @@
 <span class="co">#&gt;           grain: 0.8, 0.8 (256 : x, 256 : y)</span>
 
 <span class="va">polys</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_polys.html">as_polys</a></span><span class="op">(</span><span class="va">tile0</span><span class="op">)</span>
-<span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/adjacent.html">adjacent</a></span><span class="op">(</span><span class="va">tile0</span><span class="op">$</span><span class="va">tileraster</span>, <span class="fl">6500</span>, include <span class="op">=</span> <span class="cn">TRUE</span>, directions <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">[</span>, <span class="st">"to"</span><span class="op">]</span>
-<span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html">crop</a></span><span class="op">(</span><span class="va">im</span>, <span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span></code></pre></div>
+<span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/adjacent.html" class="external-link">adjacent</a></span><span class="op">(</span><span class="va">tile0</span><span class="op">$</span><span class="va">tileraster</span>, <span class="fl">6500</span>, include <span class="op">=</span> <span class="cn">TRUE</span>, directions <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">[</span>, <span class="st">"to"</span><span class="op">]</span>
+<span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">im</span>, <span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span></code></pre></div>
 <p>Finally, we have an in-memory raster of the original source data for very specific tiles.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rr</span>
@@ -202,14 +198,14 @@
 <span class="co">#&gt; min values :  25,  28,   2 </span>
 <span class="co">#&gt; max values : 238, 246, 250</span>
 
-<span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plotRGB.html">plotRGB</a></span><span class="op">(</span><span class="va">rr</span><span class="op">)</span>
+<span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plotRGB.html" class="external-link">plotRGB</a></span><span class="op">(</span><span class="va">rr</span><span class="op">)</span>
 <span class="fu">sp</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span>, lab <span class="op">=</span> <span class="va">cells</span>, col <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span>, lab <span class="op">=</span> <span class="va">cells</span>, col <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-specific-1.png"><!-- --></p>
 </div>
-<div id="todo" class="section level2">
-<h2 class="hasAnchor">
-<a href="#todo" class="anchor"></a>TODO</h2>
+<div class="section level2">
+<h2 id="todo">TODO<a class="anchor" aria-label="anchor" href="#todo"></a>
+</h2>
 <ul>
 <li>remove need for using sp polygons</li>
 <li>set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))</li>
@@ -217,10 +213,10 @@
 </ul>
 <hr>
 </div>
-<div id="code-of-conduct" class="section level2">
-<h2 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
-<p>Please note that the grout project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<div class="section level2">
+<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h2>
+<p>Please note that the grout project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
 
@@ -228,51 +224,62 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/hypertidy/grout/">https://​github.com/​hypertidy/​grout/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/hypertidy/grout/issues">https://​github.com/​hypertidy/​grout/​issues</a>
-</li>
+<li><a href="https://github.com/hypertidy/grout/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/hypertidy/grout/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing grout</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Michael D. Sumner <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=grout"><img src="https://www.r-pkg.org/badges/version/grout" alt="CRAN status"></a></li>
-<li><a href="https://github.com/hypertidy/grout/actions"><img src="https://github.com/hypertidy/grout/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://CRAN.R-project.org/package=grout" class="external-link"><img src="https://www.r-pkg.org/badges/version/grout" alt="CRAN status"></a></li>
+<li><a href="https://github.com/hypertidy/grout/actions" class="external-link"><img src="https://github.com/hypertidy/grout/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Michael D. Sumner.</p>
+  <p></p>
+<p>Developed by Michael D. Sumner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -280,6 +287,8 @@
 
   
 
+
+  
 
   </body>
 </html>
