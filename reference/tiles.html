@@ -20,7 +20,7 @@ of the data don't fit neatly within the tiles."><!-- mathjax --><script src="htt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">grout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.9002</span>
       </span>
     </div>
 
@@ -87,25 +87,33 @@ of the data don't fit neatly within the tiles.</p>
 <span class="r-in">                              ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">volcano</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="co">## one (too) big tile</span></span>
 <span class="r-in"><span class="va">tile</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">rv</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'tiles' is deprecated.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'grout' instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .local(x, ...):</span> invalid layer names</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tile</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(tile):</span> object 'tile' not found</span>
 <span class="r-in"><span class="va">tile</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           tiles: 1, 1 (x * y = 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           block: 256, 256 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          dangle: 195, 169 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tile resolution: 365.1148, 179.4943 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     tile extent: 0, 365.1148, -118.4943, 61 (xmin,xmax,ymin,ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           grain: 1.42623, 0.7011494 (256 : x, 256 : y)</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'tile' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">rv</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rasterImage(as.raster(zc), min(x), min(y), max(x), max(y), interpolate = FALSE):</span> plot.new has not been called yet</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="tiles-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in axis(1):</span> plot.new has not been called yet</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in axis(2):</span> plot.new has not been called yet</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## more size appropriate</span></span>
 <span class="r-in"><span class="va">tils</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">rv</span>, <span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'tiles' is deprecated.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'grout' instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in grout(...):</span> unused argument (8)</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tils</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(tils):</span> object 'tils' not found</span>
 <span class="r-in"><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">rv</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rasterImage(as.raster(zc), min(x), min(y), max(x), max(y), interpolate = FALSE):</span> plot.new has not been called yet</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tils</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="tiles-2.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(tils, add = TRUE):</span> object 'tils' not found</span>
 </code></pre></div>
     </div>
   </div>
