@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @importFrom tibble tibble
-#' @importFrom vaster col_from_cell row_from_cell cell_from_row
+#' @importFrom vaster col_from_cell row_from_cell cell_from_row cell_from_col
 #' @examples
 #' tile_index(grout(volcano, c(32, 16)))
 #' ## only one tile in this weird scheme!
@@ -35,7 +35,7 @@ tile_index <- function(x) {
   nY <- rep(x$scheme$blockY, nc)
   
   if (x$scheme$dangleX > 0) {
-    nX[col_from_cell(scheme$dimension, scheme$dimension[1L])] <- x$scheme$blockX - x$scheme$dangleX
+    nX[cell_from_col(scheme$dimension, scheme$dimension[1L])] <- x$scheme$blockX - x$scheme$dangleX
   }
   if (x$scheme$dangleY > 0) {
     nY[cell_from_row(scheme$dimension, scheme$dimension[2L])] <- x$scheme$blockY - x$scheme$dangleY

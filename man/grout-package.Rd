@@ -6,7 +6,7 @@
 \alias{grout-package}
 \title{grout: Create Raster Tiles}
 \description{
-Create raster tiles abstractly, or from large input files.
+Create raster tiles abstractly.
 }
 \seealso{
 Useful links:

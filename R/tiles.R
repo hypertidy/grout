@@ -5,22 +5,22 @@
   dm <- as.integer(x$dimension)
   blockX <- blocksize[1L]
   blockY <- blocksize[2L]
-  if (dm[2L] <= blockX) {
+  if (dm[1L] <= blockX) {
     ntilesX <- 1L
   } else {
-    ntilesX <- (dm[2L] %/% blockX)
-    if (ntilesX * blockX < dm[2L]) ntilesX <- ntilesX + 1L  ## hack
+    ntilesX <- (dm[1L] %/% blockX)
+    if (ntilesX * blockX < dm[1L]) ntilesX <- ntilesX + 1L  ## hack
   }
-  if (blockX == 1) ntilesX <- dm[2L]
-  dangleX <- (ntilesX * blockX) - dm[2L] 
-  if (dm[1L] <= blockY) {
+  if (blockX == 1) ntilesX <- dm[1L]
+  dangleX <- (ntilesX * blockX) - dm[1L] 
+  if (dm[2L] <= blockY) {
     ntilesY <- 1L
   } else {
-    ntilesY <- (dm[1L] %/% blockY)
+    ntilesY <- (dm[2L] %/% blockY)
   }
-  if (ntilesY * blockY < dm[1L]) ntilesY <- ntilesY + 1  ## hack
-  if (blockY == 1) ntilesY <- dm[1L]
-  dangleY <- (ntilesY * blockY) - dm[1L] 
+  if (ntilesY * blockY < dm[2L]) ntilesY <- ntilesY + 1  ## hack
+  if (blockY == 1) ntilesY <- dm[2L]
+  dangleY <- (ntilesY * blockY) - dm[2L] 
   structure(list(inputraster = x, 
        ntilesX = ntilesX, ntilesY = ntilesY, 
        dangleX = dangleX, dangleY = dangleY, 
