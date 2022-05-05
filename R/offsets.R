@@ -20,23 +20,24 @@
 #'
 #' @importFrom tibble tibble
 #' @examples
-#' tile_index(tiles(raster::raster(volcano), blockX = 32, blockY = 16))
+#' tile_index(tiles(volcano, c(32, 16)))
 #' ## only one tile in this weird scheme!
-#' tile_index(tiles(raster::raster(volcano), blockX = 61, blockY = 87))
+#' tile_index(tiles(volcano, c(61, 87)))
 tile_index <- function(x) {
   scheme <- x$tileraster
-  nc <- raster::ncell(scheme)
+  nc <- prod(scheme$dimension)
   tile <- seq_len(nc)
-  offsetX <- (raster::colFromCell(scheme, tile) - 1) * x$scheme$blockX
-  offsetY <- (raster::rowFromCell(scheme, tile) - 1)   * x$scheme$blockY
+  
+  offsetX <- (col_from_cell(scheme, tile) - 1) * x$scheme$blockX
+  offsetY <- (row_from_cell(scheme, tile) - 1)   * x$scheme$blockY
   nX <- rep(x$scheme$blockX, nc)
   nY <- rep(x$scheme$blockY, nc)
   
   if (x$scheme$dangleX > 0) {
-    nX[raster::cellFromCol(scheme, ncol(scheme))] <- x$scheme$blockX - x$scheme$dangleX
+    nX[col_from_cell(scheme, scheme$dimension[1L])] <- x$scheme$blockX - x$scheme$dangleX
   }
   if (x$scheme$dangleY > 0) {
-    nY[raster::cellFromRow(scheme, nrow(scheme))] <- x$scheme$blockY - x$scheme$dangleY
+    nY[cell_from_row(scheme, scheme$dimension[2L])] <- x$scheme$blockY - x$scheme$dangleY
   }
   tibble::tibble(tile = tile, offset_x = offsetX, offset_y = offsetY, ncol = nX, nrow = nY)
 }

@@ -209,6 +209,28 @@ function(x, cell) {
   cell[cell < 1 | cell > prod(x$dimension)] <- NA
   trunc((cell - 1)/x$dimension[1L]) + 1
 }
+cell_from_row <- function(x, row) {
+ row <- round(row)
+  cols <- rep(seq_len(x$dimension[1L]), times=length(row))
+  rows <- rep(row, each=ncol(x))
+  cell_from_row_col(x, rows, cols)
+}
+
+cell_from_row_col <- 
+function(x, row, col) {
+  colrow <- cbind(col, row)  ## for recycling
+  colnr <- colrow[,1L]
+  rownr <- colrow[,2L]
+
+  nr <- x$dimension[2L]
+  nc <- x$dimension[1L]
+  i <- seq_along(rownr)-1
+  nn <- length(rownr)
+
+  r <- rownr[ifelse(i < nn, i, i %% nn) + 1]
+  c <- colnr[ifelse(i < nn, i, i %% nn) + 1]
+  ifelse(r < 1 | r > nr | c < 1 | c > nc, NA,  (r-1) * nc + c)
+}
 
 #' @name as_polys
 #' @importFrom methods as
