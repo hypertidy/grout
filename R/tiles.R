@@ -70,6 +70,12 @@ extent.grout_tilescheme <- function(x) {
 #' raster::image(rv, add = TRUE)
 #' plot(tils, add = TRUE)
 tiles <- function(x, blockX = 256, blockY = 256) {
+  has_names <- function(x, nms) {
+    all(nms %in% names(x))
+  }
+  if (is.list(x) && has_names(x, c("dimXY", "extent", "projection"))) {
+    x <- raster::raster(raster::extent(x$extent), ncols = x$dimXY[1], nrows = x$dimXY[2], crs = x$projection)
+  }
   ts <- .tilescheme(x, blockX = blockX, blockY = blockY)
   rt <- raster::raster(extent.grout_tilescheme(ts), 
                        ncol = ts$ntilesX, nrow = ts$ntilesY, crs = raster::crs(x))
