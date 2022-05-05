@@ -12,3 +12,4 @@
 ^pkgdown$
 ^grout\.Rproj$
 ^\.github$
+^gdalwmscache$
