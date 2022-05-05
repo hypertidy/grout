@@ -1,3 +1,12 @@
+# grout dev
+
+* Removed use of raster for core parts, package not yet clear. We use {vaster} for
+basic extent and cell logic. No plotting atm. 
+
+o BREAKING CHANGE
+
+* `tiles()` function replaced by `grout()`
+
 # grout 0.0.2.9001
 
 * New function `tile_index()` to generate offsets table, for reading/writing with GDAL. 

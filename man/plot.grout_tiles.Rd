@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{a grout [tiles()] object}
 
-\item{...}{arguments passed to methods (particularly [sp::plot()])}
+\item{...}{arguments passed to methods}
 
 \item{border}{the colour of the tile border (default grey)}
 

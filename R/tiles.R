@@ -28,7 +28,7 @@
        class = "grout_tilescheme")
 
 }
-
+#' @importFrom vaster x_res y_res
 extent.grout_tilescheme <- function(x) {
                 c(x$inputraster$extent[1L], 
                  x$inputraster$extent[1L] +  (x$blockX *  x$ntilesX) * vaster:::x_res(x$inputraster$extent, 
@@ -56,8 +56,7 @@ extent.grout_tilescheme <- function(x) {
 #' @export
 #'
 #' @examples
-#' rv <- raster::raster(volcano, xmn = 0, xmx = nrow(volcano), 
-#'                               ymn = 0, ymx = ncol(volcano))
+
 #' ## one (too) big tile
 #' tile <- grout(volcano, c(256L, 256L))
 #' plot(tile)
@@ -67,7 +66,7 @@ extent.grout_tilescheme <- function(x) {
 #' axis(1); axis(2)
 #' 
 #' ## more size appropriate
-#' tils <- tiles(rv, 8, 8)
+#' tils <- grout(volcano, c(8, 8))
 #' plot(tils)
 #' raster::image(rv, add = TRUE)
 #' plot(tils, add = TRUE)
@@ -136,15 +135,16 @@ print.grout_tiles <- function(x, ...) {
 #' plot tiles
 #' 
 #' @param x a grout [tiles()] object
-#' @param ... arguments passed to methods (particularly [sp::plot()])
+#' @param ... arguments passed to methods 
 #' @param border the colour of the tile border (default grey)
 #' @param lwd the width of the tile border (default = 2)
 #' @importFrom graphics plot
 #' @export
 plot.grout_tiles <- function(x, ..., border = "grey", lwd = 2) {
-  sp::plot(as_polys(x), ..., border = border, lwd = lwd)
-  raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
-  invisible(NULL)
+  stop("not working atm")
+  # sp::plot(as_polys(x), ..., border = border, lwd = lwd)
+  # raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
+  # invisible(NULL)
 }
 
 #' Create rect (extent) table
@@ -169,13 +169,14 @@ as_rect <- function(x, ...) {
 #' @name as_rect
 #' @export
 as_rect.grout_tiles <- function(x, ...) {
-  xx <- seq(raster::xmin(x$tileraster), raster::xmax(x$tileraster), length = ncol(x$tileraster) + 1L)
-  yy <- seq(raster::ymin(x$tileraster), raster::ymax(x$tileraster), length = nrow(x$tileraster) + 1L)
- 
-  idx <- .p2s(seq_along(xx))
-  idy <- .p2s(seq_along(yy))
-  tibble::as_tibble(cbind(expand.grid(x0 = xx[idx[,1L]], y0 = yy[idy[,1L]]), 
-                 expand.grid(x1 = xx[idx[,2L]], y1 = yy[idy[,2L]])))
+  stop("not working atm")
+  # xx <- seq(raster::xmin(x$tileraster), raster::xmax(x$tileraster), length = ncol(x$tileraster) + 1L)
+  # yy <- seq(raster::ymin(x$tileraster), raster::ymax(x$tileraster), length = nrow(x$tileraster) + 1L)
+  # 
+  # idx <- .p2s(seq_along(xx))
+  # idy <- .p2s(seq_along(yy))
+  # tibble::as_tibble(cbind(expand.grid(x0 = xx[idx[,1L]], y0 = yy[idy[,1L]]), 
+  #                expand.grid(x1 = xx[idx[,2L]], y1 = yy[idy[,2L]])))
 }
 #' Tiles as polygons
 #' 
@@ -186,51 +187,7 @@ as_rect.grout_tiles <- function(x, ...) {
 as_polys <- function(x, ...) {
   UseMethod("as_polys")
 }
-x_corner <- function(x) {
-  xl <- x$extent[1:2]
-  ##resx <- vaster:::x_res(x$extent, x$dimension)
-  seq(xl[1L], xl[2L], length.out = x$dimension[1L] + 1L)
-}
-y_corner <- function(x) {
-  yl <- x$extent[3:4]
-  ##resy <- vaster:::y_res(x$tileraster$extent, x$tileraster$dimension)
-  seq(yl[1L], yl[2L], length.out = x$dimension[2L] + 1L)
-}
-col_from_cell <- 
-function(x, cell) {
-  cell <- round(cell)
-  cell[cell < 1L | cell > prod(x$dimension)] <- NA
-  rownr <- trunc((cell - 1)/x$dimension[2L]) + 1L
-  as.integer(cell - ((rownr - 1) * x$dimension[1L]))
-}
-row_from_cell <- 
-function(x, cell) {
-  cell <- round(cell)
-  cell[cell < 1 | cell > prod(x$dimension)] <- NA
-  trunc((cell - 1)/x$dimension[1L]) + 1
-}
-cell_from_row <- function(x, row) {
- row <- round(row)
-  cols <- rep(seq_len(x$dimension[1L]), times=length(row))
-  rows <- rep(row, each=ncol(x))
-  cell_from_row_col(x, rows, cols)
-}
 
-cell_from_row_col <- 
-function(x, row, col) {
-  colrow <- cbind(col, row)  ## for recycling
-  colnr <- colrow[,1L]
-  rownr <- colrow[,2L]
-
-  nr <- x$dimension[2L]
-  nc <- x$dimension[1L]
-  i <- seq_along(rownr)-1
-  nn <- length(rownr)
-
-  r <- rownr[ifelse(i < nn, i, i %% nn) + 1]
-  c <- colnr[ifelse(i < nn, i, i %% nn) + 1]
-  ifelse(r < 1 | r > nr | c < 1 | c > nc, NA,  (r-1) * nc + c)
-}
 
 #' @name as_polys
 #' @importFrom methods as

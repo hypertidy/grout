@@ -28,7 +28,7 @@ Note that ncol,nrow is the block size *unless* the tile is part of a dangling co
 the raster doesn't fill complete tiles.
 }
 \examples{
-tile_index(tiles(raster::raster(volcano), blockX = 32, blockY = 16))
+tile_index(grout(volcano, c(32, 16)))
 ## only one tile in this weird scheme!
-tile_index(tiles(raster::raster(volcano), blockX = 61, blockY = 87))
+tile_index(grout(volcano, c(61, 87)))
 }
