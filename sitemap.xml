@@ -25,6 +25,9 @@
     <loc>/reference/grout-package.html</loc>
   </url>
   <url>
+    <loc>/reference/grout.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -35,8 +38,5 @@
   </url>
   <url>
     <loc>/reference/tile_index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tiles.html</loc>
   </url>
 </urlset>
