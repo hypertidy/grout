@@ -31,10 +31,10 @@
 #' @importFrom vaster x_res y_res
 extent.grout_tilescheme <- function(x) {
                 c(x$inputraster$extent[1L], 
-                 x$inputraster$extent[1L] +  (x$blockX *  x$ntilesX) * vaster:::x_res(x$inputraster$extent, 
-                                                                                      x$inputraster$dimension), 
-                 x$inputraster$extent[4L] -  (x$blockY *  x$ntilesY) * vaster:::y_res(x$inputraster$extent, 
-                                                                                      x$inputraster$dimension), 
+                 x$inputraster$extent[1L] +  (x$blockX *  x$ntilesX) * vaster:::x_res(x$inputraster$dimension, 
+                                                                                      x$inputraster$extent), 
+                 x$inputraster$extent[4L] -  (x$blockY *  x$ntilesY) * vaster:::y_res(x$inputraster$dimension, 
+                                                                                      x$inputraster$extent), 
                  x$inputraster$extent[4L] )
 }
 
@@ -118,16 +118,16 @@ print.grout_tiles <- function(x, ...) {
   cat(sprintf("          tiles: %i, %i (x * y = %i)\n",  dm[2L], dm[1L], prod(dm)) )
   cat(sprintf("          block: %i, %i \n", x$scheme$blockX, x$scheme$blockY) )
   cat(sprintf("         dangle: %i, %i \n", x$scheme$dangleX, x$scheme$dangleY))
-  rs <- c(vaster:::x_res(ex, dm), vaster:::y_res(ex, dm))
+  rs <- c(vaster:::x_res(dm, ex), vaster:::y_res(dm, ex))
   cat(sprintf("tile resolution: %s, %s \n", format(rs[1L]), format(rs[2L])))
   cat(sprintf("    tile extent: %s, %s, %s, %s (xmin,xmax,ymin,ymax)\n", 
               format(ex[1L]), 
                      format(ex[2L]), 
                             format(ex[3L]),
                                    format(ex[4L])))
-  
-  rg <- c(vaster:::x_res(ex, dm), 
-          vaster:::y_res(ex, dm))
+ 
+  rg <- c(vaster:::x_res(dm, ex), 
+          vaster:::y_res(dm, ex))
   cat(sprintf("          grain: %s, %s (%i : x, %i : y)", format(rg[1L]), format(rg[2L]), x$scheme$blockX, x$scheme$blockY))
   invisible(NULL)
 }
