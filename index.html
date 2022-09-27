@@ -75,75 +75,75 @@
 <p>We use the term “block” to refer to the size of each tile in pixels.</p>
 <p>Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/grout" class="external-link">grout</a></span><span class="op">)</span>
-<span class="va">r0</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">16</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
-<span class="fu">tiles</span><span class="op">(</span><span class="va">r0</span>, blockX <span class="op">=</span> <span class="fl">4</span>, blockY <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="co">#&gt;           tiles: 4, 3 (x * y = 12)</span>
-<span class="co">#&gt;           block: 4, 4 </span>
-<span class="co">#&gt;          dangle: 0, 0 </span>
-<span class="co">#&gt; tile resolution: 4, 4 </span>
-<span class="co">#&gt;     tile extent: 0, 16, 0, 12 (xmin,xmax,ymin,ymax)</span>
-<span class="co">#&gt;           grain: 1, 1 (4 : x, 4 : y)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/grout" class="external-link">grout</a></span><span class="op">)</span></span>
+<span><span class="va">r0</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">raster</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">16</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span><span class="fu">tiles</span><span class="op">(</span><span class="va">r0</span>, blockX <span class="op">=</span> <span class="fl">4</span>, blockY <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           tiles: 4, 3 (x * y = 12)</span></span>
+<span><span class="co">#&gt;           block: 4, 4 </span></span>
+<span><span class="co">#&gt;          dangle: 0, 0 </span></span>
+<span><span class="co">#&gt; tile resolution: 4, 4 </span></span>
+<span><span class="co">#&gt;     tile extent: 0, 16, 0, 12 (xmin,xmax,ymin,ymax)</span></span>
+<span><span class="co">#&gt;           grain: 1, 1 (4 : x, 4 : y)</span></span></code></pre></div>
 <p>But, if our raster has an dimension that doesn’t divide neatly into the block size, then there is some tile overlap. This should work for any raster dimension and any arbitrary tile size.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span>, <span class="fl">15</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">15</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>
-<span class="fu">tiles</span><span class="op">(</span><span class="va">r1</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>
-<span class="co">#&gt;           tiles: 4, 4 (x * y = 16)</span>
-<span class="co">#&gt;           block: 4, 4 </span>
-<span class="co">#&gt;          dangle: 1, 3 </span>
-<span class="co">#&gt; tile resolution: 4, 4 </span>
-<span class="co">#&gt;     tile extent: 0, 16, -3, 13 (xmin,xmax,ymin,ymax)</span>
-<span class="co">#&gt;           grain: 1, 1 (4 : x, 4 : y)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">raster</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span>, <span class="fl">15</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">15</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span>
+<span><span class="fu">tiles</span><span class="op">(</span><span class="va">r1</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           tiles: 4, 4 (x * y = 16)</span></span>
+<span><span class="co">#&gt;           block: 4, 4 </span></span>
+<span><span class="co">#&gt;          dangle: 1, 3 </span></span>
+<span><span class="co">#&gt; tile resolution: 4, 4 </span></span>
+<span><span class="co">#&gt;     tile extent: 0, 16, -3, 13 (xmin,xmax,ymin,ymax)</span></span>
+<span><span class="co">#&gt;           grain: 1, 1 (4 : x, 4 : y)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="fl">30</span>, <span class="fl">44</span><span class="op">)</span>, xmn<span class="op">=</span> <span class="fl">0</span>,xmx <span class="op">=</span> <span class="fl">4</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-
-
-<span class="op">(</span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">r</span>, blockX <span class="op">=</span> <span class="fl">12</span>, blockY <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;           tiles: 4, 3 (x * y = 12)</span>
-<span class="co">#&gt;           block: 12, 12 </span>
-<span class="co">#&gt;          dangle: 4, 6 </span>
-<span class="co">#&gt; tile resolution: 1.090909, 1.2 </span>
-<span class="co">#&gt;     tile extent: 0, 4.363636, -0.6, 3 (xmin,xmax,ymin,ymax)</span>
-<span class="co">#&gt;           grain: 0.09090909, 0.1 (12 : x, 12 : y)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">raster</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="fl">30</span>, <span class="fl">44</span><span class="op">)</span>, xmn<span class="op">=</span> <span class="fl">0</span>,xmx <span class="op">=</span> <span class="fl">4</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">r</span>, blockX <span class="op">=</span> <span class="fl">12</span>, blockY <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           tiles: 4, 3 (x * y = 12)</span></span>
+<span><span class="co">#&gt;           block: 12, 12 </span></span>
+<span><span class="co">#&gt;          dangle: 4, 6 </span></span>
+<span><span class="co">#&gt; tile resolution: 1.090909, 1.2 </span></span>
+<span><span class="co">#&gt;     tile extent: 0, 4.363636, -0.6, 3 (xmin,xmax,ymin,ymax)</span></span>
+<span><span class="co">#&gt;           grain: 0.09090909, 0.1 (12 : x, 12 : y)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-grid-1.png"><!-- --></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">volcano</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;           tiles: 6, 6 (x * y = 36)</span>
-<span class="co">#&gt;           block: 12, 16 </span>
-<span class="co">#&gt;          dangle: 11, 9 </span>
-<span class="co">#&gt; tile resolution: 0.1967213, 0.183908 </span>
-<span class="co">#&gt;     tile extent: 0, 1.180328, -0.1034483, 1 (xmin,xmax,ymin,ymax)</span>
-<span class="co">#&gt;           grain: 0.01639344, 0.01149425 (12 : x, 16 : y)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">volcano</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           tiles: 6, 6 (x * y = 36)</span></span>
+<span><span class="co">#&gt;           block: 12, 16 </span></span>
+<span><span class="co">#&gt;          dangle: 11, 9 </span></span>
+<span><span class="co">#&gt; tile resolution: 0.1967213, 0.183908 </span></span>
+<span><span class="co">#&gt;     tile extent: 0, 1.180328, -0.1034483, 1 (xmin,xmax,ymin,ymax)</span></span>
+<span><span class="co">#&gt;           grain: 0.01639344, 0.01149425 (12 : x, 16 : y)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-grid-2.png"><!-- --></p>
 <p>We can generate a table of offset indexes, for use in reading from GDAL (say).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/tile_index.html">tile_index</a></span><span class="op">(</span><span class="va">t2</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 36 × 5</span>
-<span class="co">#&gt;     tile offset_x offset_y  ncol  nrow</span>
-<span class="co">#&gt;    &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     1        0        0    12    16</span>
-<span class="co">#&gt;  2     2        1        0    12    16</span>
-<span class="co">#&gt;  3     3        2        0    12    16</span>
-<span class="co">#&gt;  4     4        3        0    12    16</span>
-<span class="co">#&gt;  5     5        4        0    12    16</span>
-<span class="co">#&gt;  6     6        5        0    11    16</span>
-<span class="co">#&gt;  7     7        0        1    12    16</span>
-<span class="co">#&gt;  8     8        1        1    12    16</span>
-<span class="co">#&gt;  9     9        2        1    12    16</span>
-<span class="co">#&gt; 10    10        3        1    12    16</span>
-<span class="co">#&gt; # … with 26 more rows</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tile_index.html">tile_index</a></span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 36 × 5</span></span>
+<span><span class="co">#&gt;     tile offset_x offset_y  ncol  nrow</span></span>
+<span><span class="co">#&gt;    &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1     1        0        0    12    16</span></span>
+<span><span class="co">#&gt;  2     2        1        0    12    16</span></span>
+<span><span class="co">#&gt;  3     3        2        0    12    16</span></span>
+<span><span class="co">#&gt;  4     4        3        0    12    16</span></span>
+<span><span class="co">#&gt;  5     5        4        0    12    16</span></span>
+<span><span class="co">#&gt;  6     6        5        0    11    16</span></span>
+<span><span class="co">#&gt;  7     7        0        1    12    16</span></span>
+<span><span class="co">#&gt;  8     8        1        1    12    16</span></span>
+<span><span class="co">#&gt;  9     9        2        1    12    16</span></span>
+<span><span class="co">#&gt; 10    10        3        1    12    16</span></span>
+<span><span class="co">#&gt; # … with 26 more rows</span></span></code></pre></div>
 <p>We can generate polygons from these.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_polys.html">as_polys</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span>
-
-<span class="fu">sp</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_polys.html">as_polys</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">sp</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-poly-1.png"><!-- --></p>
 <p>Or just plot the scheme.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png"><!-- --></p>
 <div class="section level2">
 <h2 id="what-for">What for?<a class="anchor" aria-label="anchor" href="#what-for"></a>
@@ -151,56 +151,56 @@
 <p>This gives us fine control over the exact nature of the data we can read from large sources.</p>
 <p>Consider this large image online:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">u</span> <span class="op">&lt;-</span> <span class="st">"/vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif"</span>
-
-<span class="va">im</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/brick.html" class="external-link">brick</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span>
-<span class="va">im</span>
-<span class="co">#&gt; class      : RasterBrick </span>
-<span class="co">#&gt; dimensions : 27051, 27657, 748149507, 3  (nrow, ncol, ncell, nlayers)</span>
-<span class="co">#&gt; resolution : 0.8, 0.8  (x, y)</span>
-<span class="co">#&gt; extent     : 259537.6, 281663.2, 3195977, 3217618  (xmin, xmax, ymin, ymax)</span>
-<span class="co">#&gt; crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs </span>
-<span class="co">#&gt; source     : SkySat_Freeport_s03_20170831T162740Z3.tif </span>
-<span class="co">#&gt; names      :   R,   G,   B </span>
-<span class="co">#&gt; min values :   0,   0,   0 </span>
-<span class="co">#&gt; max values : 255, 255, 255</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">u</span> <span class="op">&lt;-</span> <span class="st">"/vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif"</span></span>
+<span></span>
+<span><span class="va">im</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">brick</span><span class="op">(</span><span class="va">u</span><span class="op">)</span></span>
+<span><span class="va">im</span></span>
+<span><span class="co">#&gt; class      : RasterBrick </span></span>
+<span><span class="co">#&gt; dimensions : 27051, 27657, 748149507, 3  (nrow, ncol, ncell, nlayers)</span></span>
+<span><span class="co">#&gt; resolution : 0.8, 0.8  (x, y)</span></span>
+<span><span class="co">#&gt; extent     : 259537.6, 281663.2, 3195977, 3217618  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs </span></span>
+<span><span class="co">#&gt; source     : SkySat_Freeport_s03_20170831T162740Z3.tif </span></span>
+<span><span class="co">#&gt; names      :   R,   G,   B </span></span>
+<span><span class="co">#&gt; min values :   0,   0,   0 </span></span>
+<span><span class="co">#&gt; max values : 255, 255, 255</span></span></code></pre></div>
 <p>The raster reader gives us a useful brick object that can be operated with, if we crop it only those cell values are read - but we have no idea about the underlying tiling of the data source itself.</p>
 <p>With GDAL more directly we can find the underlying tile structure, which tells us about the 256x256 tiling scheme.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu">vapour</span><span class="fu">::</span><span class="fu">vapour_raster_info</span><span class="op">(</span><span class="va">u</span><span class="op">)</span>
-
-<span class="va">info</span><span class="op">[</span><span class="st">"tilesXY"</span><span class="op">]</span>
-<span class="co">#&gt; $tilesXY</span>
-<span class="co">#&gt; [1] 256 256</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu">vapour</span><span class="fu">::</span><span class="fu">vapour_raster_info</span><span class="op">(</span><span class="va">u</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">info</span><span class="op">[</span><span class="st">"tilesXY"</span><span class="op">]</span></span>
+<span><span class="co">#&gt; $tilesXY</span></span>
+<span><span class="co">#&gt; [1] 256 256</span></span></code></pre></div>
 <p>Now with grout we can actually generate the tile scheme and work with it, let’s say we know that we want a region near tile number 6500. Using the raster version of the tiles we can find the adjacent tile cell numbers, then use that to crop the original source.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">tile0</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">im</span>, <span class="va">info</span><span class="op">$</span><span class="va">tilesXY</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">info</span><span class="op">$</span><span class="va">tilesXY</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;           tiles: 109, 106 (x * y = 11554)</span>
-<span class="co">#&gt;           block: 256, 256 </span>
-<span class="co">#&gt;          dangle: 247, 85 </span>
-<span class="co">#&gt; tile resolution: 204.8, 204.8 </span>
-<span class="co">#&gt;     tile extent: 259537.6, 281860.8, 3195909, 3217618 (xmin,xmax,ymin,ymax)</span>
-<span class="co">#&gt;           grain: 0.8, 0.8 (256 : x, 256 : y)</span>
-
-<span class="va">polys</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_polys.html">as_polys</a></span><span class="op">(</span><span class="va">tile0</span><span class="op">)</span>
-<span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/adjacent.html" class="external-link">adjacent</a></span><span class="op">(</span><span class="va">tile0</span><span class="op">$</span><span class="va">tileraster</span>, <span class="fl">6500</span>, include <span class="op">=</span> <span class="cn">TRUE</span>, directions <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">[</span>, <span class="st">"to"</span><span class="op">]</span>
-<span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">im</span>, <span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">tile0</span> <span class="op">&lt;-</span> <span class="fu">tiles</span><span class="op">(</span><span class="va">im</span>, <span class="va">info</span><span class="op">$</span><span class="va">tilesXY</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">info</span><span class="op">$</span><span class="va">tilesXY</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           tiles: 109, 106 (x * y = 11554)</span></span>
+<span><span class="co">#&gt;           block: 256, 256 </span></span>
+<span><span class="co">#&gt;          dangle: 247, 85 </span></span>
+<span><span class="co">#&gt; tile resolution: 204.8, 204.8 </span></span>
+<span><span class="co">#&gt;     tile extent: 259537.6, 281860.8, 3195909, 3217618 (xmin,xmax,ymin,ymax)</span></span>
+<span><span class="co">#&gt;           grain: 0.8, 0.8 (256 : x, 256 : y)</span></span>
+<span></span>
+<span><span class="va">polys</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_polys.html">as_polys</a></span><span class="op">(</span><span class="va">tile0</span><span class="op">)</span></span>
+<span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">adjacent</span><span class="op">(</span><span class="va">tile0</span><span class="op">$</span><span class="va">tileraster</span>, <span class="fl">6500</span>, include <span class="op">=</span> <span class="cn">TRUE</span>, directions <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">[</span>, <span class="st">"to"</span><span class="op">]</span></span>
+<span><span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">crop</span><span class="op">(</span><span class="va">im</span>, <span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we have an in-memory raster of the original source data for very specific tiles.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rr</span>
-<span class="co">#&gt; class      : RasterBrick </span>
-<span class="co">#&gt; dimensions : 768, 768, 589824, 3  (nrow, ncol, ncell, nlayers)</span>
-<span class="co">#&gt; resolution : 0.8, 0.8  (x, y)</span>
-<span class="co">#&gt; extent     : 273259.2, 273873.6, 3205125, 3205739  (xmin, xmax, ymin, ymax)</span>
-<span class="co">#&gt; crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs </span>
-<span class="co">#&gt; source     : memory</span>
-<span class="co">#&gt; names      :   R,   G,   B </span>
-<span class="co">#&gt; min values :  25,  28,   2 </span>
-<span class="co">#&gt; max values : 238, 246, 250</span>
-
-<span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plotRGB.html" class="external-link">plotRGB</a></span><span class="op">(</span><span class="va">rr</span><span class="op">)</span>
-<span class="fu">sp</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span>, lab <span class="op">=</span> <span class="va">cells</span>, col <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rr</span></span>
+<span><span class="co">#&gt; class      : RasterBrick </span></span>
+<span><span class="co">#&gt; dimensions : 768, 768, 589824, 3  (nrow, ncol, ncell, nlayers)</span></span>
+<span><span class="co">#&gt; resolution : 0.8, 0.8  (x, y)</span></span>
+<span><span class="co">#&gt; extent     : 273259.2, 273873.6, 3205125, 3205739  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs </span></span>
+<span><span class="co">#&gt; source     : memory</span></span>
+<span><span class="co">#&gt; names      :   R,   G,   B </span></span>
+<span><span class="co">#&gt; min values :  25,  28,   2 </span></span>
+<span><span class="co">#&gt; max values : 238, 246, 250</span></span>
+<span></span>
+<span><span class="fu">raster</span><span class="fu">::</span><span class="fu">plotRGB</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span></span>
+<span><span class="fu">sp</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="fu">sp</span><span class="fu">::</span><span class="fu">coordinates</span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span>, lab <span class="op">=</span> <span class="va">cells</span>, col <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-specific-1.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -279,7 +279,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

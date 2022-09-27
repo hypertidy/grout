@@ -59,21 +59,28 @@ of the data don't fit neatly within the tiles.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu"><a href="https://rdrr.io/pkg/grout/man/grout-package.html" class="external-link">grout</a></span><span class="op">(</span><span class="va">x</span>, blocksize <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/grout/man/grout-package.html" class="external-link">grout</a></span><span class="op">(</span><span class="va">x</span>, blocksize <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a raster specification, a list with extent, dimension, projection</p></dd>
+
+
 <dt>blockX</dt>
 <dd><p>tile dimensions in columns (X)</p></dd>
+
+
 <dt>blockY</dt>
 <dd><p>tile diemnsions in rows (Y)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A "tile scheme" object with information about the tile spacing and extent.</p>
+    
+
+<p>A "tile scheme" object with information about the tile spacing and extent.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -83,32 +90,29 @@ of the data don't fit neatly within the tiles.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## one (too) big tile</span></span>
-<span class="r-in"><span class="va">tile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/grout/man/grout-package.html" class="external-link">grout</a></span><span class="op">(</span><span class="va">volcano</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">256L</span>, <span class="fl">256L</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tile</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot.grout_tiles(tile):</span> not working atm</span>
-<span class="r-in"><span class="va">tile</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           tiles: 1, 1 (x * y = 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           block: 256, 256 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          dangle: 169, 195 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tile resolution: 256, 256 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     tile extent: 0, 256, -195, 61 (xmin,xmax,ymin,ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           grain: 256, 256 (256 : x, 256 : y)</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">rv</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'image': object 'rv' not found</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## one (too) big tile</span></span></span>
+<span class="r-in"><span><span class="va">tile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/grout/man/grout-package.html" class="external-link">grout</a></span><span class="op">(</span><span class="va">volcano</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">256L</span>, <span class="fl">256L</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_args(dimension, extent):</span> dimension must be length = 2</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tile</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(tile):</span> object 'tile' not found</span>
+<span class="r-in"><span><span class="va">tile</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'tile' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">raster</span><span class="fu">::</span><span class="fu">image</span><span class="op">(</span><span class="va">rv</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘raster’</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in axis(1):</span> plot.new has not been called yet</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in axis(2):</span> plot.new has not been called yet</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## more size appropriate</span></span>
-<span class="r-in"><span class="va">tils</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/grout/man/grout-package.html" class="external-link">grout</a></span><span class="op">(</span><span class="va">volcano</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tils</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot.grout_tiles(tils):</span> not working atm</span>
-<span class="r-in"><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">rv</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'image': object 'rv' not found</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tils</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot.grout_tiles(tils, add = TRUE):</span> not working atm</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## more size appropriate</span></span></span>
+<span class="r-in"><span><span class="va">tils</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/grout/man/grout-package.html" class="external-link">grout</a></span><span class="op">(</span><span class="va">volcano</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_args(dimension, extent):</span> dimension must be length = 2</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tils</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(tils):</span> object 'tils' not found</span>
+<span class="r-in"><span><span class="fu">raster</span><span class="fu">::</span><span class="fu">image</span><span class="op">(</span><span class="va">rv</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘raster’</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tils</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(tils, add = TRUE):</span> object 'tils' not found</span>
 </code></pre></div>
     </div>
   </div>
@@ -123,7 +127,7 @@ of the data don't fit neatly within the tiles.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
