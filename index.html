@@ -137,7 +137,7 @@
 <span><span class="co">#&gt; # … with 26 more rows</span></span></code></pre></div>
 <p>We can generate polygons from these.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_polys.html">as_polys</a></span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">as_polys</span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">sp</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-poly-1.png"><!-- --></p>
@@ -182,7 +182,7 @@
 <span><span class="co">#&gt;     tile extent: 259537.6, 281860.8, 3195909, 3217618 (xmin,xmax,ymin,ymax)</span></span>
 <span><span class="co">#&gt;           grain: 0.8, 0.8 (256 : x, 256 : y)</span></span>
 <span></span>
-<span><span class="va">polys</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_polys.html">as_polys</a></span><span class="op">(</span><span class="va">tile0</span><span class="op">)</span></span>
+<span><span class="va">polys</span> <span class="op">&lt;-</span> <span class="fu">as_polys</span><span class="op">(</span><span class="va">tile0</span><span class="op">)</span></span>
 <span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">adjacent</span><span class="op">(</span><span class="va">tile0</span><span class="op">$</span><span class="va">tileraster</span>, <span class="fl">6500</span>, include <span class="op">=</span> <span class="cn">TRUE</span>, directions <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">[</span>, <span class="st">"to"</span><span class="op">]</span></span>
 <span><span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">crop</span><span class="op">(</span><span class="va">im</span>, <span class="va">polys</span><span class="op">[</span><span class="va">cells</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we have an in-memory raster of the original source data for very specific tiles.</p>
