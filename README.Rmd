@@ -32,8 +32,8 @@ Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap.
 
 ```{r overlap}
 library(grout)
-r0 <- raster::raster(matrix(0, 12, 16), xmn = 0, xmx = 16, ymn = 0, ymx = 12)
-tiles(r0, blockX = 4, blockY = 4)
+##r0 <- raster::raster(matrix(0, 12, 16), xmn = 0, xmx = 16, ymn = 0, ymx = 12)
+grout(c(4, 4), extent = c(0, 16, 0, 12), blocksize = c(4L, 4L))
 
 ```
 
@@ -42,21 +42,21 @@ then there is some tile overlap. This should work for any raster dimension and a
 
 
 ```{r dangle}
-r1 <- raster::raster(matrix(0, 13, 15), xmn = 0, xmx = 15, ymn = 0, ymx = 13)
-tiles(r1, 4, 4)
+#r1 <- raster::raster(matrix(0, 13, 15), xmn = 0, xmx = 15, ymn = 0, ymx = 13)
+grout(c(15, 13), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L))
 
 ```
 
 
 ```{r grid}
 
-r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
+#r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
 
 
-(t1 <- tiles(r, blockX = 12, blockY = 12))
+(t1 <- grout(c(44, 30), blocksize = c(12, 12)))
 plot(t1)
 
-(t2 <- tiles(volcano, 12, 16))
+(t2 <- grout:::.groutfrom(volcano, blocksize = c(12, 16)))
 
 plot(t2)
 ```
@@ -67,12 +67,12 @@ We can generate a table of offset indexes, for use in reading from GDAL (say).
 tile_index(t2)
 ```
 
-We can generate polygons from these. 
+We (will be able to)  generate polygons from these, but currently WIP
 
-```{r poly}
-p <- as_polys(t1)
+```{r poly, eval=FALSE}
+#p <- as_polys(t1)
 
-sp::plot(p)
+#sp::plot(p)
 ```
 
 Or just plot the scheme. 

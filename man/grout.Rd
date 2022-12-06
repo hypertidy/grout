@@ -4,7 +4,7 @@
 \alias{grout}
 \title{Create a tiling scheme from a raster}
 \usage{
-grout(x, blocksize = NULL)
+grout(dimension, extent = NULL, blocksize = NULL, projection = NA_character_)
 }
 \arguments{
 \item{x}{a raster specification, a list with extent, dimension, projection}
@@ -28,17 +28,9 @@ The tile scheme object has print and plot methods for basic information.
 See function [as_polys()] to generate tiles from the scheme.
 }
 \examples{
-## one (too) big tile
-tile <- grout(volcano, c(256L, 256L))
-plot(tile)
-tile
-
-raster::image(rv, add = TRUE)
-axis(1); axis(2)
-
+## one block tile (too big)
+grout(c(87, 61), blocksize = c(256L, 256L))
 ## more size appropriate
-tils <- grout(volcano, c(8, 8))
-plot(tils)
-raster::image(rv, add = TRUE)
-plot(tils, add = TRUE)
+grout(c(87, 61), blocksize = c(8, 8))
+grout(c(10, 20), c(0, 1, 0, 2), blocksize = c(256, 256))
 }

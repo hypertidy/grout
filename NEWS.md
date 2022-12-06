@@ -1,5 +1,7 @@
 # grout dev
 
+* Original `grout()` function is effectively removed, and renamed to internal .groutfrom(). 
+
 * Added extent (xmin,xmax, ymin, ymax ) to `tile_index()`. 
 
 * Removed use of raster for core parts, package not yet clear. We use {vaster} for

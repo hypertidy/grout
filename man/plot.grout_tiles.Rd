@@ -4,7 +4,7 @@
 \alias{plot.grout_tiles}
 \title{plot tiles}
 \usage{
-\method{plot}{grout_tiles}(x, ..., border = "grey", lwd = 2)
+\method{plot}{grout_tiles}(x, ..., add = FALSE, border = "grey", lwd = 2)
 }
 \arguments{
 \item{x}{a grout [tiles()] object}

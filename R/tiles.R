@@ -56,21 +56,18 @@ extent.grout_tilescheme <- function(x) {
 #' @export
 #'
 #' @examples
-
-#' ## one (too) big tile
-#' tile <- grout(volcano, c(256L, 256L))
-#' plot(tile)
-#' tile
-#' 
-#' raster::image(rv, add = TRUE)
-#' axis(1); axis(2)
-#' 
+#' ## one block tile (too big)
+#' grout(c(87, 61), blocksize = c(256L, 256L))
 #' ## more size appropriate
-#' tils <- grout(volcano, c(8, 8))
-#' plot(tils)
-#' raster::image(rv, add = TRUE)
-#' plot(tils, add = TRUE)
-grout <- function(x, blocksize = NULL) {
+#' grout(c(87, 61), blocksize = c(8, 8))
+#' grout(c(10, 20), c(0, 1, 0, 2), blocksize = c(256, 256))
+grout <- function(dimension, extent = NULL, blocksize = NULL, projection = NA_character_) {
+  if (is.null(extent)) extent <- c(0, dimension[1L], 0, dimension[2L])
+  x <- list(extent = extent, dimension = dimension, projection = projection)
+  
+  .groutfrom(x, blocksize)
+}
+.groutfrom <- function(x, blocksize = NULL) {
   if (is.array(x)) {
     x <- list(extent = c(0, nrow(x), 0, ncol(x)), 
               dimension = dim(x)[1:2], 
@@ -83,6 +80,7 @@ grout <- function(x, blocksize = NULL) {
   if (is.character(x)) {
     x <- vapour::vapour_raster_info(x)
   }
+
   if (is.list(x) && has_names(x, edp)) {
     if (is.null(blocksize) && has_names(x, "tiles")) {
         blocksize <- x$tiles
@@ -104,10 +102,7 @@ grout <- function(x, blocksize = NULL) {
             class = "grout_tiles")
 }
 
-tiles <- function(... )  {
-  .Deprecated("grout")
-  grout(...)
-}
+
 #' print tiles
 #' @param x a grout [tiles()] object
 #' @param ... ignored
@@ -140,71 +135,35 @@ print.grout_tiles <- function(x, ...) {
 #' @param lwd the width of the tile border (default = 2)
 #' @importFrom graphics plot
 #' @export
-plot.grout_tiles <- function(x, ..., border = "grey", lwd = 2) {
-  stop("not working atm")
-  # sp::plot(as_polys(x), ..., border = border, lwd = lwd)
-  # raster::plot(raster::extent(x$scheme$inputraster), add = TRUE, col = "firebrick", lty = 2)
-  # invisible(NULL)
+plot.grout_tiles <- function(x, ..., add = FALSE, border = "grey", lwd = 2) {
+  ext <- as_rect.grout_tiles(x)
+  vaster::plot_extent(ext, add = add, border = border, lwd = lwd, ...)
+  vaster::plot_extent(x$scheme$inputraster$extent, add = TRUE, lty = 2, border = "firebrick")
+  invisible(NULL)
 }
 
-#' Create rect (extent) table
-#' 
-#' Data frame of extents xmin, xmax, ymin, ymax. 
-#' 
-#' @param x  a grout [tiles()] object 
-#'
-#' @param ... ignored
-#'
-#' @name as_rect
-#' @return data frame of tile extents
-#' @export
-#' 
-as_rect <- function(x, ...) {
-  UseMethod("as_rect")
-}
+
 .p2s <- function(x) {
   cbind(vx0 = x[-length(x)],
   .vx1 = x[-1L])
 } 
-#' @name as_rect
-#' @export
+
 as_rect.grout_tiles <- function(x, ...) {
-  stop("not working atm")
-  # xx <- seq(raster::xmin(x$tileraster), raster::xmax(x$tileraster), length = ncol(x$tileraster) + 1L)
-  # yy <- seq(raster::ymin(x$tileraster), raster::ymax(x$tileraster), length = nrow(x$tileraster) + 1L)
-  # 
-  # idx <- .p2s(seq_along(xx))
-  # idy <- .p2s(seq_along(yy))
-  # tibble::as_tibble(cbind(expand.grid(x0 = xx[idx[,1L]], y0 = yy[idy[,1L]]), 
-  #                expand.grid(x1 = xx[idx[,2L]], y1 = yy[idy[,2L]])))
-}
-#' Tiles as polygons
-#' 
-#' @param x a grout [tiles()] object 
-#' @param ... ignored
-#'
-#' @export
-as_polys <- function(x, ...) {
-  UseMethod("as_polys")
-}
-
-
-#' @name as_polys
-#' @importFrom methods as
-#' @export
-as_polys.grout_tiles <- function(x, ...) {
-   stop("not working atm")
+   #stop("not working atm")
   ## WIP
-  xs <- x_corner(x$tileraster)
-  ys <- y_corner(x$tileraster)
-  cell <- seq_len(prod(x$dimension))
-  idx <- col_from_cell(x$tileraster, cell)
-  jdx <- row_from_cell(x$tileraster, cell)
-  
-  grd <- expand.grid(idx, jdx)
-  grd <- cbind(grd, grd + 1)
-  # pp <- as(x$tileraster, "SpatialPolygonsDataFrame")
-  # pp$tile <- seq(raster::ncell(x$tileraster))
-  # pp$layer <- NULL
-  pp
+  xs <- vaster::x_corner(x$tileraster$dimension, 
+                         x$tileraster$extent)
+  ys <- vaster::y_corner(x$tileraster$dimension, 
+                 x$tileraster$extent)
+  # cell <- seq_len(prod(x$tileraster$dimension))
+  # idx <- vaster::col_from_cell(x$tileraster$dimension, cell)
+  # jdx <- vaster::row_from_cell(x$tileraster$dimension, cell)
+  # 
+  # grd <- expand.grid(idx, jdx)
+  # grd <- cbind(grd, grd + 1)
+  # 
+  grd <- cbind(expand.grid(head(xs, -1), head(ys, -1)), 
+               expand.grid(tail(xs, -1), tail(ys, -1)))[,c(1, 3, 2, 4)]
+  colnames(grd) <- c("xmin", "xmax", "ymin", "ymax")
+ tibble::as_tibble(grd)
 }

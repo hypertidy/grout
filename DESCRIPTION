@@ -9,7 +9,7 @@ License: GPL-3
 LazyData: true
 Suggests:
     testthat (>= 2.1.0)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Encoding: UTF-8
 Imports: 
     methods,
