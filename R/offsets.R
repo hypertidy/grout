@@ -51,7 +51,10 @@ tile_index <- function(x) {
     minY <-   input$extent[4] +  (offsetY + nY)     * -res[2]
     maxY <-   input$extent[4] +  offsetY * -res[2]
 
+    tile_row <- (offsetY %/% x$scheme$blockY) + 1
+    tile_col <- (offsetX %/% x$scheme$blockX) + 1
     
-    
-  tibble::tibble(tile = tile, offset_x = offsetX, offset_y = offsetY, ncol = nX, nrow = nY, xmin = minX, xmax  = maxX, ymin = minY, ymax = maxY)
+  tibble::tibble(tile = tile, offset_x = offsetX, offset_y = offsetY, 
+                 tile_col = tile_col, tile_row = tile_row, 
+                 ncol = nX, nrow = nY, xmin = minX, xmax  = maxX, ymin = minY, ymax = maxY)
 }

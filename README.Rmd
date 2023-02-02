@@ -108,18 +108,20 @@ Now with grout we can actually generate the tile scheme and work with it, let's 
 index <- tile_index(tile0)
 polys <- wk::rct(index$xmin, index$ymin, index$xmax, index$ymax)
 cl <- 1584
-row <- vaster::row_from_cell((dm %/% 128) + 1, cl)
-col <- vaster::col_from_cell((dm %/% 128) + 1, cl)
+tile_dim <- c(max(index$tile_col), max(index$tile_row))
+row <- vaster::row_from_cell(tile_dim, cl)
+col <- vaster::col_from_cell(tile_dim, cl)
 
 rowcol <- expand.grid(c(-1, 0, 1) + row, 
             c(-1, 0, 1) + col)
 ## adjacent (this really needs some work between grout and vaster to make it obvious and easy)
-cells <- vaster::cell_from_row_col((dm %/% 128) + 1, rowcol[,1], rowcol[,2])
+cells <- vaster::cell_from_row_col(tile_dim, rowcol[,1], rowcol[,2])
 
 #cells <- raster::adjacent(tile0$tileraster, 6500, include = TRUE, directions = 8)[, "to"]
 exs <- index[cells, c("xmin", "xmax", "ymin", "ymax")]
 ex <- c(min(exs$xmin), max(exs$xmax), min(exs$ymin), max(exs$ymax))
-im <- whatarelief::imagery(source = dsn, extent = ex, dimension = c(128, 128) * 3, projection = info$projection)
+## *3 because we got adjacent tiles by row,col above
+im <- whatarelief::imagery(source = dsn, extent = ex, dimension = info$block * 3, projection = info$projection)
 plot(polys, col = seq_along(polys) == cl)
 ximage::ximage(im, extent = ex, add = TRUE)
 
@@ -136,8 +138,9 @@ text(wk::wk_coords(geos::geos_centroid(polys[cells ]))[, c("x", "y")], lab = cel
 
 ## TODO
 
+- [ ] need more helpers for levels of tiles, even generating all overview levels with these helper extents and dangles
 - [x] remove need for using sp polygons
-- [ ] set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))
+- [x] set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))
 - [x] remove use of sp and raster internally for the data structures, just store the information about the grid/s
 
 

@@ -83,19 +83,19 @@ We can generate a table of offset indexes, for use in reading from GDAL
 
 ``` r
 tile_index(t2)
-#> # A tibble: 32 × 9
-#>     tile offset_x offset_y  ncol  nrow  xmin  xmax  ymin  ymax
-#>    <int>    <dbl>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1     1        0        0    12    16     0    12    45    61
-#>  2     2       12        0    12    16    12    24    45    61
-#>  3     3       24        0    12    16    24    36    45    61
-#>  4     4       36        0    12    16    36    48    45    61
-#>  5     5       48        0    12    16    48    60    45    61
-#>  6     6       60        0    12    16    60    72    45    61
-#>  7     7       72        0    12    16    72    84    45    61
-#>  8     8       84        0     3    16    84    87    45    61
-#>  9     9        0       16    12    16     0    12    29    45
-#> 10    10       12       16    12    16    12    24    29    45
+#> # A tibble: 32 × 11
+#>     tile offset_x offset_y tile_col tile_row  ncol  nrow  xmin  xmax  ymin  ymax
+#>    <int>    <dbl>    <dbl>    <dbl>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1     1        0        0        1        1    12    16     0    12    45    61
+#>  2     2       12        0        2        1    12    16    12    24    45    61
+#>  3     3       24        0        3        1    12    16    24    36    45    61
+#>  4     4       36        0        4        1    12    16    36    48    45    61
+#>  5     5       48        0        5        1    12    16    48    60    45    61
+#>  6     6       60        0        6        1    12    16    60    72    45    61
+#>  7     7       72        0        7        1    12    16    72    84    45    61
+#>  8     8       84        0        8        1     3    16    84    87    45    61
+#>  9     9        0       16        1        2    12    16     0    12    29    45
+#> 10    10       12       16        2        2    12    16    12    24    29    45
 #> # … with 22 more rows
 ```
 
@@ -178,18 +178,20 @@ numbers, then use that to crop the original source.
 index <- tile_index(tile0)
 polys <- wk::rct(index$xmin, index$ymin, index$xmax, index$ymax)
 cl <- 1584
-row <- vaster::row_from_cell((dm %/% 128) + 1, cl)
-col <- vaster::col_from_cell((dm %/% 128) + 1, cl)
+tile_dim <- c(max(index$tile_col), max(index$tile_row))
+row <- vaster::row_from_cell(tile_dim, cl)
+col <- vaster::col_from_cell(tile_dim, cl)
 
 rowcol <- expand.grid(c(-1, 0, 1) + row, 
             c(-1, 0, 1) + col)
 ## adjacent (this really needs some work between grout and vaster to make it obvious and easy)
-cells <- vaster::cell_from_row_col((dm %/% 128) + 1, rowcol[,1], rowcol[,2])
+cells <- vaster::cell_from_row_col(tile_dim, rowcol[,1], rowcol[,2])
 
 #cells <- raster::adjacent(tile0$tileraster, 6500, include = TRUE, directions = 8)[, "to"]
 exs <- index[cells, c("xmin", "xmax", "ymin", "ymax")]
 ex <- c(min(exs$xmin), max(exs$xmax), min(exs$ymin), max(exs$ymax))
-im <- whatarelief::imagery(source = dsn, extent = ex, dimension = c(128, 128) * 3, projection = info$projection)
+## *3 because we got adjacent tiles by row,col above
+im <- whatarelief::imagery(source = dsn, extent = ex, dimension = info$block * 3, projection = info$projection)
 plot(polys, col = seq_along(polys) == cl)
 ximage::ximage(im, extent = ex, add = TRUE)
 ```
@@ -209,8 +211,10 @@ text(wk::wk_coords(geos::geos_centroid(polys[cells ]))[, c("x", "y")], lab = cel
 
 ## TODO
 
+- [ ] need more helpers for levels of tiles, even generating all
+  overview levels with these helper extents and dangles
 - [x] remove need for using sp polygons
-- [ ] set tools for cropping that use the index, not spatial extent
+- [x] set tools for cropping that use the index, not spatial extent
   (i.e. extent(x, x0, x1, y0, y1))
 - [x] remove use of sp and raster internally for the data structures,
   just store the information about the grid/s
