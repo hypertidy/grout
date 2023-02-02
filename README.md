@@ -7,6 +7,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/grout)](https://CRAN.R-project.org/package=grout)
 [![R-CMD-check](https://github.com/hypertidy/grout/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/grout/actions)
+[![R-CMD-check](https://github.com/hypertidy/grout/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hypertidy/grout/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # grout
