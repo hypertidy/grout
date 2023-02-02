@@ -173,7 +173,7 @@
 <span><span class="co">## level 16 is a reasonable size to experiment with</span></span>
 <span><span class="va">dm</span> <span class="op">&lt;-</span> <span class="va">overviews</span><span class="op">[</span><span class="fl">16L</span>, , drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></code></pre></div>
 <p>The raster readers in terra or stars gives us an object that can be operated with, if we crop it only those cell values are read - but we have no idea about the underlying tiling of the data source itself.</p>
-<p>With GDAL more directly we can find the underlying tile structure, which tells us about the 256x256 tiling scheme.</p>
+<p>With GDAL more directly we can find the underlying tile structure, which tells us about the <em>blocked</em> tiling scheme.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">info</span><span class="op">[</span><span class="st">"block"</span><span class="op">]</span></span>
 <span><span class="co">#&gt; $block</span></span>
