@@ -18,18 +18,21 @@ impose (in pixels).
 
 We use the term “block” to refer to the size of each tile in pixels.
 
+We use the simplest specification of a *raster grid*, which is six
+numbers: *dimension* `c(ncol, nrow)` and *extent*
+`c(xmin, xmax, ymin, ymax)`.
+
 Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap.
 
 ``` r
 library(grout)
-r0 <- raster::raster(matrix(0, 12, 16), xmn = 0, xmx = 16, ymn = 0, ymx = 12)
-tiles(r0, blockX = 4, blockY = 4)
-#>           tiles: 4, 3 (x * y = 12)
+grout(c(4, 4), extent = c(0, 16, 0, 12), blocksize = c(4L, 4L))
+#>           tiles: 1, 1 (x * y = 1)
 #>           block: 4, 4 
 #>          dangle: 0, 0 
-#> tile resolution: 4, 4 
+#> tile resolution: 16, 12 
 #>     tile extent: 0, 16, 0, 12 (xmin,xmax,ymin,ymax)
-#>           grain: 1, 1 (4 : x, 4 : y)
+#>           grain: 16, 12 (4 : x, 4 : y)
 ```
 
 But, if our raster has an dimension that doesn’t divide neatly into the
@@ -37,40 +40,37 @@ block size, then there is some tile overlap. This should work for any
 raster dimension and any arbitrary tile size.
 
 ``` r
-r1 <- raster::raster(matrix(0, 13, 15), xmn = 0, xmx = 15, ymn = 0, ymx = 13)
-tiles(r1, 4, 4)
+grout(c(15, 13), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L))
 #>           tiles: 4, 4 (x * y = 16)
 #>           block: 4, 4 
 #>          dangle: 1, 3 
 #> tile resolution: 4, 4 
 #>     tile extent: 0, 16, -3, 13 (xmin,xmax,ymin,ymax)
-#>           grain: 1, 1 (4 : x, 4 : y)
+#>           grain: 4, 4 (4 : x, 4 : y)
 ```
 
 ``` r
-r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
-
-
-(t1 <- tiles(r, blockX = 12, blockY = 12))
-#>           tiles: 4, 3 (x * y = 12)
+(t1 <- grout(c(44, 30), blocksize = c(12, 12)))
+#>           tiles: 3, 4 (x * y = 12)
 #>           block: 12, 12 
 #>          dangle: 4, 6 
-#> tile resolution: 1.090909, 1.2 
-#>     tile extent: 0, 4.363636, -0.6, 3 (xmin,xmax,ymin,ymax)
-#>           grain: 0.09090909, 0.1 (12 : x, 12 : y)
+#> tile resolution: 12, 12 
+#>     tile extent: 0, 48, -6, 30 (xmin,xmax,ymin,ymax)
+#>           grain: 12, 12 (12 : x, 12 : y)
 plot(t1)
 ```
 
 ![](man/figures/README-grid-1.png)<!-- -->
 
 ``` r
-(t2 <- tiles(volcano, 12, 16))
-#>           tiles: 6, 6 (x * y = 36)
+
+(t2 <- grout:::.groutfrom(volcano, blocksize = c(12, 16)))
+#>           tiles: 4, 8 (x * y = 32)
 #>           block: 12, 16 
-#>          dangle: 11, 9 
-#> tile resolution: 0.1967213, 0.183908 
-#>     tile extent: 0, 1.180328, -0.1034483, 1 (xmin,xmax,ymin,ymax)
-#>           grain: 0.01639344, 0.01149425 (12 : x, 16 : y)
+#>          dangle: 9, 3 
+#> tile resolution: 12, 16 
+#>     tile extent: 0, 96, -3, 61 (xmin,xmax,ymin,ymax)
+#>           grain: 12, 16 (12 : x, 16 : y)
 
 plot(t2)
 ```
@@ -82,31 +82,23 @@ We can generate a table of offset indexes, for use in reading from GDAL
 
 ``` r
 tile_index(t2)
-#> # A tibble: 36 × 5
-#>     tile offset_x offset_y  ncol  nrow
-#>    <int>    <dbl>    <dbl> <int> <dbl>
-#>  1     1        0        0    12    16
-#>  2     2        1        0    12    16
-#>  3     3        2        0    12    16
-#>  4     4        3        0    12    16
-#>  5     5        4        0    12    16
-#>  6     6        5        0    11    16
-#>  7     7        0        1    12    16
-#>  8     8        1        1    12    16
-#>  9     9        2        1    12    16
-#> 10    10        3        1    12    16
-#> # … with 26 more rows
+#> # A tibble: 32 × 9
+#>     tile offset_x offset_y  ncol  nrow  xmin  xmax  ymin  ymax
+#>    <int>    <dbl>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1     1        0        0    12    16     0    12    45    61
+#>  2     2       12        0    12    16    12    24    45    61
+#>  3     3       24        0    12    16    24    36    45    61
+#>  4     4       36        0    12    16    36    48    45    61
+#>  5     5       48        0    12    16    48    60    45    61
+#>  6     6       60        0    12    16    60    72    45    61
+#>  7     7       72        0    12    16    72    84    45    61
+#>  8     8       84        0     3    16    84    87    45    61
+#>  9     9        0       16    12    16     0    12    29    45
+#> 10    10       12       16    12    16    12    24    29    45
+#> # … with 22 more rows
 ```
 
-We can generate polygons from these.
-
-``` r
-p <- as_polys(t1)
-
-sp::plot(p)
-```
-
-![](man/figures/README-poly-1.png)<!-- -->
+See below for generating `wk::rct` objects from the tile index.
 
 Or just plot the scheme.
 
@@ -124,84 +116,103 @@ from large sources.
 Consider this large image online:
 
 ``` r
-u <- "/vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif"
+url <- "https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/WMTS/1.0.0/WMTSCapabilities.xml,layer=Topographic_Base_Map,tilematrixset=default028mm"
+dsn <- sprintf("WMTS:%s,layer=Topographic_Base_Map,tilematrixset=default028mm", url)
+info <- vapour::vapour_raster_info(dsn)
+(overviews <- matrix(info$overviews, ncol = 2, byrow = TRUE))
+#>            [,1]      [,2]
+#>  [1,] 205851559 165517805
+#>  [2,] 102925779  82758902
+#>  [3,]  51462890  41379451
+#>  [4,]  25731445  20689726
+#>  [5,]  12865722  10344863
+#>  [6,]   6432861   5172431
+#>  [7,]   3216431   2586216
+#>  [8,]   1608215   1293108
+#>  [9,]    804108    646554
+#> [10,]    402054    323277
+#> [11,]    201027    161638
+#> [12,]    100513     80819
+#> [13,]     50257     40410
+#> [14,]     25128     20205
+#> [15,]     12564     10102
+#> [16,]      6282      5051
+#> [17,]      3141      2526
+#> [18,]      1571      1263
+#> [19,]       785       631
+#> [20,]       393       316
+#> [21,]       196       158
 
-im <- raster::brick(u)
-im
-#> class      : RasterBrick 
-#> dimensions : 27051, 27657, 748149507, 3  (nrow, ncol, ncell, nlayers)
-#> resolution : 0.8, 0.8  (x, y)
-#> extent     : 259537.6, 281663.2, 3195977, 3217618  (xmin, xmax, ymin, ymax)
-#> crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs 
-#> source     : SkySat_Freeport_s03_20170831T162740Z3.tif 
-#> names      :   R,   G,   B 
-#> min values :   0,   0,   0 
-#> max values : 255, 255, 255
+## level 16 is a reasonable size to experiment with
+dm <- overviews[16L, , drop = TRUE]
 ```
 
-The raster reader gives us a useful brick object that can be operated
-with, if we crop it only those cell values are read - but we have no
-idea about the underlying tiling of the data source itself.
+The raster readers in terra or stars gives us an object that can be
+operated with, if we crop it only those cell values are read - but we
+have no idea about the underlying tiling of the data source itself.
 
 With GDAL more directly we can find the underlying tile structure, which
 tells us about the 256x256 tiling scheme.
 
 ``` r
-info <- vapour::vapour_raster_info(u)
-
-info["tilesXY"]
-#> $tilesXY
-#> [1] 256 256
+info["block"]
+#> $block
+#> [1] 128 128
 ```
 
 Now with grout we can actually generate the tile scheme and work with
-it, let’s say we know that we want a region near tile number 6500. Using
-the raster version of the tiles we can find the adjacent tile cell
+it, let’s say we know that we want a region near tile number 1583. Using
+the information about the tiles we can find the adjacent tile cell
 numbers, then use that to crop the original source.
 
 ``` r
-(tile0 <- tiles(im, info$tilesXY[1], info$tilesXY[2]))
-#>           tiles: 109, 106 (x * y = 11554)
-#>           block: 256, 256 
-#>          dangle: 247, 85 
-#> tile resolution: 204.8, 204.8 
-#>     tile extent: 259537.6, 281860.8, 3195909, 3217618 (xmin,xmax,ymin,ymax)
-#>           grain: 0.8, 0.8 (256 : x, 256 : y)
+(tile0 <- grout(dm, info$extent, blocksize = info$block))
+#>           tiles: 40, 50 (x * y = 2000)
+#>           block: 128, 128 
+#>          dangle: 118, 69 
+#> tile resolution: 156545.3, 156549.3 
+#>     tile extent: 11148027, 18975292, -6527909, -265936.2 (xmin,xmax,ymin,ymax)
+#>           grain: 156545.3, 156549.3 (128 : x, 128 : y)
 
-polys <- as_polys(tile0)
-cells <- raster::adjacent(tile0$tileraster, 6500, include = TRUE, directions = 8)[, "to"]
-rr <- raster::crop(im, polys[cells, ])
+index <- tile_index(tile0)
+polys <- wk::rct(index$xmin, index$ymin, index$xmax, index$ymax)
+cl <- 1584
+row <- vaster::row_from_cell((dm %/% 128) + 1, cl)
+col <- vaster::col_from_cell((dm %/% 128) + 1, cl)
+
+rowcol <- expand.grid(c(-1, 0, 1) + row, 
+            c(-1, 0, 1) + col)
+## adjacent (this really needs some work between grout and vaster to make it obvious and easy)
+cells <- vaster::cell_from_row_col((dm %/% 128) + 1, rowcol[,1], rowcol[,2])
+
+#cells <- raster::adjacent(tile0$tileraster, 6500, include = TRUE, directions = 8)[, "to"]
+exs <- index[cells, c("xmin", "xmax", "ymin", "ymax")]
+ex <- c(min(exs$xmin), max(exs$xmax), min(exs$ymin), max(exs$ymax))
+im <- whatarelief::imagery(source = dsn, extent = ex, dimension = c(128, 128) * 3, projection = info$projection)
+plot(polys, col = seq_along(polys) == cl)
+ximage::ximage(im, extent = ex, add = TRUE)
 ```
+
+![](man/figures/README-scheme-1.png)<!-- -->
 
 Finally, we have an in-memory raster of the original source data for
 very specific tiles.
 
 ``` r
-rr
-#> class      : RasterBrick 
-#> dimensions : 768, 768, 589824, 3  (nrow, ncol, ncell, nlayers)
-#> resolution : 0.8, 0.8  (x, y)
-#> extent     : 273259.2, 273873.6, 3205125, 3205739  (xmin, xmax, ymin, ymax)
-#> crs        : +proj=utm +zone=15 +datum=WGS84 +units=m +no_defs 
-#> source     : memory
-#> names      :   R,   G,   B 
-#> min values :  25,  28,   2 
-#> max values : 238, 246, 250
-
-raster::plotRGB(rr)
-sp::plot(polys[cells, ], add = TRUE, border = "firebrick")
-text(sp::coordinates(polys[cells, ]), lab = cells, col = "yellow")
+ximage::ximage(im, extent = ex, asp = 1)
+plot(polys[cells], add = TRUE)
+text(wk::wk_coords(geos::geos_centroid(polys[cells ]))[, c("x", "y")], lab = cells, col = "firebrick", cex = 1.5)
 ```
 
 ![](man/figures/README-specific-1.png)<!-- -->
 
 ## TODO
 
--   remove need for using sp polygons
--   set tools for cropping that use the index, not spatial extent
-    (i.e. extent(x, x0, x1, y0, y1))
--   remove use of sp and raster internally for the data structures, just
-    store the information about the grid/s
+- [x] remove need for using sp polygons
+- [ ] set tools for cropping that use the index, not spatial extent
+  (i.e. extent(x, x0, x1, y0, y1))
+- [x] remove use of sp and raster internally for the data structures,
+  just store the information about the grid/s
 
 ------------------------------------------------------------------------
 

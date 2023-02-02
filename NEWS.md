@@ -1,5 +1,7 @@
 # grout dev
 
+* Removed all spatial input, just use dimension, extent. 
+
 * Original `grout()` function is effectively removed, and renamed to internal .groutfrom(). 
 
 * Added extent (xmin,xmax, ymin, ymax ) to `tile_index()`. 

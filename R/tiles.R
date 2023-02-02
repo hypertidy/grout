@@ -31,9 +31,9 @@
 #' @importFrom vaster x_res y_res
 extent.grout_tilescheme <- function(x) {
                 c(x$inputraster$extent[1L], 
-                 x$inputraster$extent[1L] +  (x$blockX *  x$ntilesX) * vaster:::x_res(x$inputraster$dimension, 
+                 x$inputraster$extent[1L] +  (x$blockX *  x$ntilesX) * vaster::x_res(x$inputraster$dimension, 
                                                                                       x$inputraster$extent), 
-                 x$inputraster$extent[4L] -  (x$blockY *  x$ntilesY) * vaster:::y_res(x$inputraster$dimension, 
+                 x$inputraster$extent[4L] -  (x$blockY *  x$ntilesY) * vaster::y_res(x$inputraster$dimension, 
                                                                                       x$inputraster$extent), 
                  x$inputraster$extent[4L] )
 }
@@ -45,13 +45,18 @@ extent.grout_tilescheme <- function(x) {
 #' in each dimension and the amount of "overlapping dangle" when the dimensions
 #' of the data don't fit neatly within the tiles. 
 #' 
+#' If extent is not provided the default 'xmin=0,xmax=ncol,ymin=0,ymax=nrow' is used. 
+#' 
 #' The tile scheme object has print and plot methods for basic information. 
 #' 
-#' See function [as_polys()] to generate tiles from the scheme. 
-#' @param x a raster specification, a list with extent, dimension, projection
-#' @param blockX tile dimensions in columns (X)
-#' @param blockY tile diemnsions in rows (Y)
-#'
+#' See example in the README with 'wk::rct' to generate plot-able and efficient 
+#' spatial objects from the scheme. 
+#' 
+#' @param dimension number of columns and rows of the raster grid
+#' @param extent extent of the raster grid xmin,xmax,ymin,ymax
+#' @param blocksize tile dimensions in columns (X) and rows (Y)
+#' @param projection the projection (crs) of the grid
+#' 
 #' @return A "tile scheme" object with information about the tile spacing and extent. 
 #' @export
 #'
@@ -65,21 +70,15 @@ grout <- function(dimension, extent = NULL, blocksize = NULL, projection = NA_ch
   if (is.null(extent)) extent <- c(0, dimension[1L], 0, dimension[2L])
   x <- list(extent = extent, dimension = dimension, projection = projection)
   
-  .groutfrom(x, blocksize)
+  .groutfrom(x,  blocksize)
 }
 .groutfrom <- function(x, blocksize = NULL) {
-  if (is.array(x)) {
-    x <- list(extent = c(0, nrow(x), 0, ncol(x)), 
-              dimension = dim(x)[1:2], 
-              projection = NA_character_)
-  }
+  ## disallow array
+
   has_names <- function(x, nms) {
     all(nms %in% names(x))
   }
   edp <- c("extent", "dimension", "projection")
-  if (is.character(x)) {
-    x <- vapour::vapour_raster_info(x)
-  }
 
   if (is.list(x) && has_names(x, edp)) {
     if (is.null(blocksize) && has_names(x, "tiles")) {
@@ -87,7 +86,7 @@ grout <- function(dimension, extent = NULL, blocksize = NULL, projection = NA_ch
     }
   } else {
     if (is.list(x) && has_names(x, c("extent", "dimXY", "projection"))) {
-      x <- setNames(x[c("extent", "dimXY", "projection")], edp)
+      x <- stats::setNames(x[c("extent", "dimXY", "projection")], edp)
     }
       
   }
@@ -106,6 +105,7 @@ grout <- function(dimension, extent = NULL, blocksize = NULL, projection = NA_ch
 #' print tiles
 #' @param x a grout [tiles()] object
 #' @param ... ignored
+#' @importFrom vaster x_res y_res
 #' @export
 print.grout_tiles <- function(x, ...) { 
   dm <- x$tileraster$dimension
@@ -113,7 +113,7 @@ print.grout_tiles <- function(x, ...) {
   cat(sprintf("          tiles: %i, %i (x * y = %i)\n",  dm[2L], dm[1L], prod(dm)) )
   cat(sprintf("          block: %i, %i \n", x$scheme$blockX, x$scheme$blockY) )
   cat(sprintf("         dangle: %i, %i \n", x$scheme$dangleX, x$scheme$dangleY))
-  rs <- c(vaster:::x_res(dm, ex), vaster:::y_res(dm, ex))
+  rs <- c(vaster::x_res(dm, ex), vaster::y_res(dm, ex))
   cat(sprintf("tile resolution: %s, %s \n", format(rs[1L]), format(rs[2L])))
   cat(sprintf("    tile extent: %s, %s, %s, %s (xmin,xmax,ymin,ymax)\n", 
               format(ex[1L]), 
@@ -121,8 +121,8 @@ print.grout_tiles <- function(x, ...) {
                             format(ex[3L]),
                                    format(ex[4L])))
  
-  rg <- c(vaster:::x_res(dm, ex), 
-          vaster:::y_res(dm, ex))
+  rg <- c(vaster::x_res(dm, ex), 
+          vaster::y_res(dm, ex))
   cat(sprintf("          grain: %s, %s (%i : x, %i : y)", format(rg[1L]), format(rg[2L]), x$scheme$blockX, x$scheme$blockY))
   invisible(NULL)
 }
@@ -131,6 +131,7 @@ print.grout_tiles <- function(x, ...) {
 #' 
 #' @param x a grout [tiles()] object
 #' @param ... arguments passed to methods 
+#' @param add add to current plot or start a new one (default is `FALSE`, a new plot)
 #' @param border the colour of the tile border (default grey)
 #' @param lwd the width of the tile border (default = 2)
 #' @importFrom graphics plot
@@ -148,6 +149,7 @@ plot.grout_tiles <- function(x, ..., add = FALSE, border = "grey", lwd = 2) {
   .vx1 = x[-1L])
 } 
 
+#' @importFrom utils head tail
 as_rect.grout_tiles <- function(x, ...) {
    #stop("not working atm")
   ## WIP

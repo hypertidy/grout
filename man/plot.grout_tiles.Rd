@@ -11,6 +11,8 @@
 
 \item{...}{arguments passed to methods}
 
+\item{add}{add to current plot or start a new one (default is `FALSE`, a new plot)}
+
 \item{border}{the colour of the tile border (default grey)}
 
 \item{lwd}{the width of the tile border (default = 2)}

@@ -7,11 +7,13 @@
 grout(dimension, extent = NULL, blocksize = NULL, projection = NA_character_)
 }
 \arguments{
-\item{x}{a raster specification, a list with extent, dimension, projection}
+\item{dimension}{number of columns and rows of the raster grid}
 
-\item{blockX}{tile dimensions in columns (X)}
+\item{extent}{extent of the raster grid xmin,xmax,ymin,ymax}
 
-\item{blockY}{tile diemnsions in rows (Y)}
+\item{blocksize}{tile dimensions in columns (X) and rows (Y)}
+
+\item{projection}{the projection (crs) of the grid}
 }
 \value{
 A "tile scheme" object with information about the tile spacing and extent.
@@ -23,9 +25,12 @@ in each dimension and the amount of "overlapping dangle" when the dimensions
 of the data don't fit neatly within the tiles.
 }
 \details{
+If extent is not provided the default 'xmin=0,xmax=ncol,ymin=0,ymax=nrow' is used. 
+
 The tile scheme object has print and plot methods for basic information. 
 
-See function [as_polys()] to generate tiles from the scheme.
+See example in the README with 'wk::rct' to generate plot-able and efficient 
+spatial objects from the scheme.
 }
 \examples{
 ## one block tile (too big)

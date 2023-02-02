@@ -23,16 +23,16 @@ knitr::opts_chunk$set(
 
 Abstract tiling schemes. 
 
-
 Given a grid, impose a tiling scheme. The dangle is overlap the tiles impose (in pixels). 
 
 We use the term "block" to refer to the size of each tile in pixels. 
+
+We use the simplest specification of a *raster grid*, which is six numbers: *dimension* `c(ncol, nrow)` and *extent* `c(xmin, xmax, ymin, ymax)`. 
 
 Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap. 
 
 ```{r overlap}
 library(grout)
-##r0 <- raster::raster(matrix(0, 12, 16), xmn = 0, xmx = 16, ymn = 0, ymx = 12)
 grout(c(4, 4), extent = c(0, 16, 0, 12), blocksize = c(4L, 4L))
 
 ```
@@ -42,17 +42,12 @@ then there is some tile overlap. This should work for any raster dimension and a
 
 
 ```{r dangle}
-#r1 <- raster::raster(matrix(0, 13, 15), xmn = 0, xmx = 15, ymn = 0, ymx = 13)
 grout(c(15, 13), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L))
 
 ```
 
 
 ```{r grid}
-
-#r <- raster::raster(matrix(1:12, 30, 44), xmn= 0,xmx = 4, ymn = 0, ymx = 3)
-
-
 (t1 <- grout(c(44, 30), blocksize = c(12, 12)))
 plot(t1)
 
@@ -67,13 +62,8 @@ We can generate a table of offset indexes, for use in reading from GDAL (say).
 tile_index(t2)
 ```
 
-We (will be able to)  generate polygons from these, but currently WIP
+See below for generating `wk::rct` objects from the tile index. 
 
-```{r poly, eval=FALSE}
-#p <- as_polys(t1)
-
-#sp::plot(p)
-```
 
 Or just plot the scheme. 
 
@@ -88,49 +78,66 @@ This gives us fine control over the exact nature of the data we can read from la
 Consider this large image online: 
 
 ```{r large}
-u <- "/vsicurl/https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif"
+url <- "https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/WMTS/1.0.0/WMTSCapabilities.xml,layer=Topographic_Base_Map,tilematrixset=default028mm"
+dsn <- sprintf("WMTS:%s,layer=Topographic_Base_Map,tilematrixset=default028mm", url)
+info <- vapour::vapour_raster_info(dsn)
+(overviews <- matrix(info$overviews, ncol = 2, byrow = TRUE))
 
-im <- raster::brick(u)
-im
+## level 16 is a reasonable size to experiment with
+dm <- overviews[16L, , drop = TRUE]
+
 ```
 
-The raster reader gives us a useful brick object that can be operated with, if we crop it only those 
+The raster readers in terra or stars gives us an object that can be operated with, if we crop it only those 
 cell values are read - but we have no idea about the underlying tiling of the data source itself. 
 
 With GDAL more directly we can find the underlying tile structure, which tells us about the 256x256 tiling
 scheme. 
 
 ```{r tile}
-info <- vapour::vapour_raster_info(u)
-
-info["tilesXY"]
+info["block"]
 ```
 
-Now with grout we can actually generate the tile scheme and work with it, let's say we know that we want a region near tile number 6500. Using the raster version of the tiles we can find the adjacent tile cell numbers, then use that to crop the original source. 
+Now with grout we can actually generate the tile scheme and work with it, let's say we know that we want a region near tile number 1583. Using the information about the tiles we can find the adjacent tile cell numbers, then use that to crop the original source. 
+
 
 ```{r scheme}
-(tile0 <- tiles(im, info$tilesXY[1], info$tilesXY[2]))
+(tile0 <- grout(dm, info$extent, blocksize = info$block))
 
-polys <- as_polys(tile0)
-cells <- raster::adjacent(tile0$tileraster, 6500, include = TRUE, directions = 8)[, "to"]
-rr <- raster::crop(im, polys[cells, ])
+index <- tile_index(tile0)
+polys <- wk::rct(index$xmin, index$ymin, index$xmax, index$ymax)
+cl <- 1584
+row <- vaster::row_from_cell((dm %/% 128) + 1, cl)
+col <- vaster::col_from_cell((dm %/% 128) + 1, cl)
+
+rowcol <- expand.grid(c(-1, 0, 1) + row, 
+            c(-1, 0, 1) + col)
+## adjacent (this really needs some work between grout and vaster to make it obvious and easy)
+cells <- vaster::cell_from_row_col((dm %/% 128) + 1, rowcol[,1], rowcol[,2])
+
+#cells <- raster::adjacent(tile0$tileraster, 6500, include = TRUE, directions = 8)[, "to"]
+exs <- index[cells, c("xmin", "xmax", "ymin", "ymax")]
+ex <- c(min(exs$xmin), max(exs$xmax), min(exs$ymin), max(exs$ymax))
+im <- whatarelief::imagery(source = dsn, extent = ex, dimension = c(128, 128) * 3, projection = info$projection)
+plot(polys, col = seq_along(polys) == cl)
+ximage::ximage(im, extent = ex, add = TRUE)
+
+
 ```
 
 Finally, we have an in-memory raster of the original source data for very specific tiles. 
 
 ```{r specific}
-rr
-
-raster::plotRGB(rr)
-sp::plot(polys[cells, ], add = TRUE, border = "firebrick")
-text(sp::coordinates(polys[cells, ]), lab = cells, col = "yellow")
+ximage::ximage(im, extent = ex, asp = 1)
+plot(polys[cells], add = TRUE)
+text(wk::wk_coords(geos::geos_centroid(polys[cells ]))[, c("x", "y")], lab = cells, col = "firebrick", cex = 1.5)
 ```
 
 ## TODO
 
-* remove need for using sp polygons
-* set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))
-* remove use of sp and raster internally for the data structures, just store the information about the grid/s
+- [x] remove need for using sp polygons
+- [ ] set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))
+- [x] remove use of sp and raster internally for the data structures, just store the information about the grid/s
 
 
 ---

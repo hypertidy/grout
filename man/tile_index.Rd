@@ -29,7 +29,7 @@ Note that ncol,nrow is the block size *unless* the tile is part of a dangling co
 the raster doesn't fill complete tiles.
 }
 \examples{
-tile_index(grout(volcano, c(32, 16)))
+tile_index(grout(c(87, 61), extent = c(0, 1, 0, 1), blocksize = c(32, 16)))
 ## only one tile in this weird scheme!
-tile_index(grout(volcano, c(61, 87)))
+tile_index(grout(c(61, 87), blocksize = c(61, 87)))
 }

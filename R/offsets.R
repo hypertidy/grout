@@ -22,9 +22,9 @@
 #' @importFrom tibble tibble
 #' @importFrom vaster col_from_cell row_from_cell cell_from_row cell_from_col
 #' @examples
-#' tile_index(grout(volcano, c(32, 16)))
+#' tile_index(grout(c(87, 61), extent = c(0, 1, 0, 1), blocksize = c(32, 16)))
 #' ## only one tile in this weird scheme!
-#' tile_index(grout(volcano, c(61, 87)))
+#' tile_index(grout(c(61, 87), blocksize = c(61, 87)))
 tile_index <- function(x) {
   scheme <- x$tileraster
   input <- x$scheme$inputraster

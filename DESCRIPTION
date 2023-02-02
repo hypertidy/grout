@@ -1,20 +1,18 @@
 Package: grout
 Title: Create Raster Tiles
-Version: 0.0.2.9005
+Version: 0.0.2.9006
 Authors@R: person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre"))
 Description: Create raster tiles abstractly. 
 Depends:
     R (>= 3.2.2)
 License: GPL-3
-LazyData: true
 Suggests:
     testthat (>= 2.1.0)
-RoxygenNote: 7.2.1
 Encoding: UTF-8
 Imports: 
-    methods,
     tibble,
     vaster (>= 0.0.0.9008)
 URL: https://github.com/hypertidy/grout
 BugReports: https://github.com/hypertidy/grout/issues
 Remotes: hypertidy/vaster
+RoxygenNote: 7.2.3
