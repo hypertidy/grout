@@ -52,7 +52,7 @@ grout(c(15, 13), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L))
 (t1 <- grout(c(44, 30), blocksize = c(12, 12)))
 plot(t1)
 
-(t2 <- grout:::.groutfrom(volcano, blocksize = c(12, 16)))
+(t2 <- grout::grout(c(87, 61), blocksize = c(12, 16)))
 
 plot(t2)
 ```

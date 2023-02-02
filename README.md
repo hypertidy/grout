@@ -65,7 +65,7 @@ plot(t1)
 
 ``` r
 
-(t2 <- grout:::.groutfrom(volcano, blocksize = c(12, 16)))
+(t2 <- grout::grout(c(87, 61), blocksize = c(12, 16)))
 #>           tiles: 4, 8 (x * y = 32)
 #>           block: 12, 16 
 #>          dangle: 9, 3 
