@@ -153,7 +153,7 @@ operated with, if we crop it only those cell values are read - but we
 have no idea about the underlying tiling of the data source itself.
 
 With GDAL more directly we can find the underlying tile structure, which
-tells us about the 256x256 tiling scheme.
+tells us about the *blocked* tiling scheme.
 
 ``` r
 info["block"]
