@@ -2,6 +2,7 @@
 % Please edit documentation in R/tile_spec.R
 \name{tile_spec}
 \alias{tile_spec}
+\alias{tile_zoom}
 \title{Create tile specification}
 \usage{
 tile_spec(
@@ -11,6 +12,13 @@ tile_spec(
   blocksize = c(256L, 256L),
   profile = c("mercator", "geodetic", "raster"),
   xyz = FALSE
+)
+
+tile_zoom(
+  dimension,
+  extent,
+  blocksize = c(256L, 256L),
+  profile = c("mercator", "geodetic", "raster")
 )
 }
 \arguments{
@@ -39,7 +47,11 @@ Profiles are 'mercator' or "geodetic" for global systems, or can
 use "raster" which will use the input grid specification as the entire domain. 
 
 'tile_row' in output is in TMS orientation (zero is at the bottom), use 
-'xyz' arg to switch.
+'xyz' arg to switch. 
+
+Function `tile_zoom()` will return the "natural" maximum zoom level, i.e. 
+the zoom at which the tile resolution is just below the input resolution. 
+Note that no reprojection is done, the input extent must match the profile chosen (use 'raster' for native profile).
 }
 \examples{
 tile_spec(c(8194, 8194), c(140, 155, -45, -30), profile = "geodetic")

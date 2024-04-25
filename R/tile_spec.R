@@ -25,6 +25,9 @@
 #' 'tile_row' in output is in TMS orientation (zero is at the bottom), use 
 #' 'xyz' arg to switch. 
 #'
+#' Function `tile_zoom()` will return the "natural" maximum zoom level, i.e. 
+#' the zoom at which the tile resolution is just below the input resolution. 
+#' Note that no reprojection is done, the input extent must match the profile chosen (use 'raster' for native profile). 
 #' @param dimension size in pixels ncol,nrow
 #' @param extent xmin,xmax,ymin,ymax
 #' @param zoom the zoom level, starts at 0 and can be up to 24
@@ -35,7 +38,7 @@
 #' @return data frame with tile specification, tile index, tile_col, tile_row, 
 #'  ncol, nrow, xmin, xmax, ymin, ymax, crs
 #' @export
-#'
+#' @importFrom vaster col_from_x row_from_y cell_from_row_col vcrop
 #' @examples
 #' tile_spec(c(8194, 8194), c(140, 155, -45, -30), profile = "geodetic")
 #' 
@@ -46,8 +49,8 @@ tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L),
                       xyz = FALSE) {
   profile <- match.arg(profile)
   
-  if (any(diff(extent)[c(1, 3)] < 20) && profile == "mercator") {
-    message("very small region for Mercator, is this geodetic (longlat) extent?")
+  if (any(diff(extent)[c(1, 3)] < 360) && profile == "mercator") {
+    message("very small region for Mercator, is this geodetic (longlat) extent? \n(use 'profile = \"geodetic\"'")
   } 
   global <- switch(profile, 
                    mercator = c(-1, 1, -1, 1) * 20037508.342789244, 
@@ -64,13 +67,23 @@ tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L),
   idimension <- blocksize * 2 ^ zoom
   
   v <- vcrop(extent, idimension, global, snap = "out")
-  
+  print(v)
   col <- col_from_x(idimension, global, v$extent[1:2]) %/% blocksize[1]
   row <- row_from_y(idimension, global, v$extent[3:4]) %/% blocksize[2]
+  maxcolrow <- idimension / blocksize
+  print(maxcolrow)
   
   xs <- seq(col[1], col[2])
-  ys <-  rep(seq(row[1], row[2]), each = length(xs)) 
+  ys <-  seq(row[1], row[2]) 
   
+  if (maxcolrow[1] > 0) {
+   xs <- setdiff(xs, maxcolrow[1])
+  }
+  if (maxcolrow[2] > 0) {
+    
+  ys <- setdiff(ys, maxcolrow[2])
+  }
+  ys <- rep(ys,  each = length(xs))
   ## switch to 0-based
   index <- cell_from_row_col(idimension %/% blocksize, ys + 1, xs + 1) - 1
   
@@ -78,11 +91,12 @@ tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L),
   tiles <- cbind(tile = index, tile_col = xs, tile_row = ys) 
   tilesize <- abs(transform[c(2, 6)]) * blocksize 
   
-  tt <- tibble::as_tibble(tiles) |> dplyr::mutate(zoom = zoom,
-                                                  xmin =  transform[1] + tile_col * tilesize[1], 
-                                                  xmax =  transform[1] + (tile_col +1) * tilesize[1], 
-                                                  ymin = transform[4] -  (tile_row + 1)* tilesize[2]  , 
-                                                  ymax = transform[4] -  (tile_row) * tilesize[2])
+  tt <- as.data.frame(tiles) 
+  tt$zoom <- zoom
+  tt$xmin <-   transform[1] + tt$tile_col * tilesize[1] 
+  tt$xmax <- transform[1] + (tt$tile_col +1) * tilesize[1]
+  tt$ymin <- transform[4] -  (tt$tile_row + 1)* tilesize[2]
+  tt$ymax <- transform[4] -  (tt$tile_row) * tilesize[2]
   ## now that we have calculated each tile extent, switch to TMS mode
   if (!xyz) {
     tt$tile_row <- idimension[2] %/% blocksize[2] - tt$tile_row
@@ -93,5 +107,41 @@ tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L),
   tt
 }
 
+#' @export
+#' @name tile_spec
+tile_zoom <- function(dimension, extent, blocksize = c(256L, 256L), 
+                      profile = c("mercator", "geodetic", "raster")) {
+  
+  
+  
+  profile <- match.arg(profile)
+  
+  if (any(diff(extent)[c(1, 3)] < 360) && profile == "mercator") {
+    message("very small region for Mercator, is this geodetic (longlat) extent? \n(use 'profile = \"geodetic\"'")
+  } 
+  global <- switch(profile, 
+                   mercator = c(-1, 1, -1, 1) * 20037508.342789244, 
+                   geodetic = c(-180, 180, -90, 90), 
+                   raster = extent)
+  crs <- switch(profile, 
+                mercator = "EPSG:3857", 
+                geodetic = "EPSG:4326", 
+                raster = NA_character_)
+  transform <- c(global[1], diff(global[1:2])/blocksize[1], 0, 
+                 global[4], 0, -diff(global[3:4])/blocksize[2])
+  idimension <- blocksize 
+  
+  v <- vcrop(extent, idimension, global, snap = "out")
+  print(transform[c(2, 6)])
+  nativeresolution <- diff(extent)[c(1, 3)]/dimension
+  for (zoom in 0:23) {
 
+    if (all(abs(transform[c(2, 6)]) < nativeresolution)) return(zoom)
+    transform[c(2, 6)] <- transform[c(2, 6)] / 2
+   idimension <- blocksize * 2 ^ zoom
+  
+    v <- vcrop(extent, idimension, global, snap = "out")
+  }
+  zoom
+} 
 

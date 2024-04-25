@@ -13,3 +13,4 @@
 ^grout\.Rproj$
 ^\.github$
 ^gdalwmscache$
+^tiles$
