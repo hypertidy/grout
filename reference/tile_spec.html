@@ -119,25 +119,11 @@ Note that no reprojection is done, the input extent must match the profile chose
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">tile_spec</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8194</span>, <span class="fl">8194</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">155</span>, <span class="op">-</span><span class="fl">45</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, profile <span class="op">=</span> <span class="st">"geodetic"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $extent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 139.21875 156.09375 -45.00000 -29.53125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $dimension</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 12 22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   tile tile_col tile_row zoom xmin xmax ymin ymax ncol nrow       crs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    0        0        1    0 -180  180  -90   90  256  256 EPSG:4326</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">tile_spec</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2048</span>, <span class="fl">248</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">155</span>, <span class="op">-</span><span class="fl">45</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, zoom <span class="op">=</span> <span class="fl">5</span>, profile <span class="op">=</span> <span class="st">"geodetic"</span>, </span></span>
 <span class="r-in"><span>   blocksize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">512</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $extent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 139.98779 155.01709 -45.00000 -29.99268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $dimension</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  684 1366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32 32</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   tile tile_col tile_row zoom   xmin   xmax    ymin    ymax ncol nrow       crs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  796       28        8    5 135.00 146.25 -50.625 -45.000  512  512 EPSG:4326</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  797       29        8    5 146.25 157.50 -50.625 -45.000  512  512 EPSG:4326</span>
