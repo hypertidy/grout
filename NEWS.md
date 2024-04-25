@@ -1,5 +1,8 @@
 # grout dev
 
+* New function 'tile_spec()' to generate tile specification from input
+ extent and dimension at a given zoom. 
+ 
 * Removed all spatial input, just use dimension, extent. 
 
 * Original `grout()` function is effectively removed, and renamed to internal .groutfrom(). 

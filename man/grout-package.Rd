@@ -3,7 +3,6 @@
 \docType{package}
 \name{grout-package}
 \alias{grout-package}
-\alias{_PACKAGE}
 \title{grout: Create Raster Tiles}
 \description{
 Create raster tiles abstractly.
