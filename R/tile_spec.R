@@ -67,11 +67,11 @@ tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L),
   idimension <- blocksize * 2 ^ zoom
   
   v <- vcrop(extent, idimension, global, snap = "out")
-  print(v)
+  
   col <- col_from_x(idimension, global, v$extent[1:2]) %/% blocksize[1]
   row <- row_from_y(idimension, global, v$extent[3:4]) %/% blocksize[2]
   maxcolrow <- idimension / blocksize
-  print(maxcolrow)
+  
   
   xs <- seq(col[1], col[2])
   ys <-  seq(row[1], row[2]) 
@@ -132,7 +132,7 @@ tile_zoom <- function(dimension, extent, blocksize = c(256L, 256L),
   idimension <- blocksize 
   
   v <- vcrop(extent, idimension, global, snap = "out")
-  print(transform[c(2, 6)])
+  
   nativeresolution <- diff(extent)[c(1, 3)]/dimension
   for (zoom in 0:23) {
 
