@@ -99,7 +99,7 @@ tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L),
   tt$ymax <- transform[4] -  (tt$tile_row) * tilesize[2]
   ## now that we have calculated each tile extent, switch to TMS mode
   if (!xyz) {
-    tt$tile_row <- idimension[2] %/% blocksize[2] - tt$tile_row
+    tt$tile_row <- (idimension[2] %/% blocksize[2]) - tt$tile_row - 1
   }
   tt$ncol <- blocksize[1]
   tt$nrow <- blocksize[2]
