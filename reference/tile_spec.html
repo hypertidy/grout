@@ -18,7 +18,7 @@ the tiling for that grid within a profile."><!-- mathjax --><script src="https:/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">grout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.9009</span>
       </span>
     </div>
 
@@ -120,19 +120,19 @@ Note that no reprojection is done, the input extent must match the profile chose
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">tile_spec</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8194</span>, <span class="fl">8194</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">155</span>, <span class="op">-</span><span class="fl">45</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, profile <span class="op">=</span> <span class="st">"geodetic"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   tile tile_col tile_row zoom xmin xmax ymin ymax ncol nrow       crs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0        0        1    0 -180  180  -90   90  256  256 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0        0        0    0 -180  180  -90   90  256  256 EPSG:4326</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">tile_spec</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2048</span>, <span class="fl">248</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">155</span>, <span class="op">-</span><span class="fl">45</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, zoom <span class="op">=</span> <span class="fl">5</span>, profile <span class="op">=</span> <span class="st">"geodetic"</span>, </span></span>
 <span class="r-in"><span>   blocksize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">512</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   tile tile_col tile_row zoom   xmin   xmax    ymin    ymax ncol nrow       crs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  796       28        8    5 135.00 146.25 -50.625 -45.000  512  512 EPSG:4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  797       29        8    5 146.25 157.50 -50.625 -45.000  512  512 EPSG:4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  764       28        9    5 135.00 146.25 -45.000 -39.375  512  512 EPSG:4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  765       29        9    5 146.25 157.50 -45.000 -39.375  512  512 EPSG:4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  732       28       10    5 135.00 146.25 -39.375 -33.750  512  512 EPSG:4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  733       29       10    5 146.25 157.50 -39.375 -33.750  512  512 EPSG:4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  700       28       11    5 135.00 146.25 -33.750 -28.125  512  512 EPSG:4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  701       29       11    5 146.25 157.50 -33.750 -28.125  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  796       28        7    5 135.00 146.25 -50.625 -45.000  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  797       29        7    5 146.25 157.50 -50.625 -45.000  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  764       28        8    5 135.00 146.25 -45.000 -39.375  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  765       29        8    5 146.25 157.50 -45.000 -39.375  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  732       28        9    5 135.00 146.25 -39.375 -33.750  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  733       29        9    5 146.25 157.50 -39.375 -33.750  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  700       28       10    5 135.00 146.25 -33.750 -28.125  512  512 EPSG:4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  701       29       10    5 146.25 157.50 -33.750 -28.125  512  512 EPSG:4326</span>
 </code></pre></div>
     </div>
   </div>
