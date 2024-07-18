@@ -28,12 +28,14 @@
 #' Function `tile_zoom()` will return the "natural" maximum zoom level, i.e. 
 #' the zoom at which the tile resolution is just below the input resolution. 
 #' Note that no reprojection is done, the input extent must match the profile chosen (use 'raster' for native profile). 
+#'
 #' @param dimension size in pixels ncol,nrow
 #' @param extent xmin,xmax,ymin,ymax
 #' @param zoom the zoom level, starts at 0 and can be up to 24
 #' @param blocksize size of each tile, defaults to 256x256
 #' @param profile profile domain to use, see Details
 #' @param xyz default is `FALSE`, if `TRUE` use xyz-mode (zero is at the top)
+#' @param crs crs, for raster profile
 #'
 #' @return data frame with tile specification, tile index, tile_col, tile_row, 
 #'  ncol, nrow, xmin, xmax, ymin, ymax, crs
@@ -46,6 +48,7 @@
 #'    blocksize = c(512, 512))
 tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L), 
                        profile = c("mercator", "geodetic", "raster"), 
+                      crs = NA,
                       xyz = FALSE) {
   profile <- match.arg(profile)
   
@@ -56,16 +59,17 @@ tile_spec <- function(dimension, extent, zoom = 0, blocksize = c(256L, 256L),
                    mercator = c(-1, 1, -1, 1) * 20037508.342789244, 
                    geodetic = c(-180, 180, -90, 90), 
                    raster = extent)
+  if (profile %in% c("mercator", "geodetic") && !is.na(crs)) message("crs is ignore for all but 'raster' profile")
   crs <- switch(profile, 
                 mercator = "EPSG:3857", 
                 geodetic = "EPSG:4326", 
-                raster = NA_character_)
+                raster = crs)
   transform <- c(global[1], diff(global[1:2])/blocksize[1], 0, 
                  global[4], 0, -diff(global[3:4])/blocksize[2])
   
   transform[c(2, 6)] <- transform[c(2, 6)] / 2^zoom
   idimension <- blocksize * 2 ^ zoom
-  
+
   v <- vcrop(extent, idimension, global, snap = "out")
   
   col <- col_from_x(idimension, global, v$extent[1:2]) %/% blocksize[1]

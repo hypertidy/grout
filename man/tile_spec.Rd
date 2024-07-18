@@ -11,6 +11,7 @@ tile_spec(
   zoom = 0,
   blocksize = c(256L, 256L),
   profile = c("mercator", "geodetic", "raster"),
+  crs = NA,
   xyz = FALSE
 )
 
@@ -31,6 +32,8 @@ tile_zoom(
 \item{blocksize}{size of each tile, defaults to 256x256}
 
 \item{profile}{profile domain to use, see Details}
+
+\item{crs}{crs, for raster profile}
 
 \item{xyz}{default is `FALSE`, if `TRUE` use xyz-mode (zero is at the top)}
 }
