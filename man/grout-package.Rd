@@ -3,9 +3,9 @@
 \docType{package}
 \name{grout-package}
 \alias{grout-package}
-\title{grout: Create Raster Tiles}
+\title{grout: Abstract Raster Tiling Schemes}
 \description{
-Create raster tiles abstractly.
+Impose a tiling scheme on a raster grid defined by its dimension and extent. Computes tile counts, pixel offsets (suitable for GDAL ReadRaster calls), and geographic extents for each tile. Also supports standard Web Mercator and geodetic tiling profiles with zoom levels, and provides a spatial map of what each chunk covers for interrogating virtual or virtualizable raster stores.
 }
 \seealso{
 Useful links:
@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michael D. Sumner \email{mdsumner@gmail.com}
+\strong{Maintainer}: Michael D. Sumner \email{mdsumner@gmail.com} (\href{https://orcid.org/0000-0002-2471-7511}{ORCID})
 
 }
 \keyword{internal}

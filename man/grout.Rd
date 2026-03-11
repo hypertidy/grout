@@ -2,40 +2,54 @@
 % Please edit documentation in R/tiles.R
 \name{grout}
 \alias{grout}
-\title{Create a tiling scheme from a raster}
+\title{Create a tiling scheme from a raster grid specification}
 \usage{
-grout(dimension, extent = NULL, blocksize = NULL, projection = NA_character_)
+grout(
+  dimension,
+  extent = NULL,
+  blocksize = c(256L, 256L),
+  projection = NA_character_
+)
 }
 \arguments{
-\item{dimension}{number of columns and rows of the raster grid}
+\item{dimension}{integer vector `c(ncol, nrow)` of the raster grid.}
 
-\item{extent}{extent of the raster grid xmin,xmax,ymin,ymax}
+\item{extent}{numeric vector `c(xmin, xmax, ymin, ymax)`.  Defaults to
+`c(0, ncol, 0, nrow)` (pixel-coordinate space).}
 
-\item{blocksize}{tile dimensions in columns (X) and rows (Y)}
+\item{blocksize}{integer vector `c(block_ncol, block_nrow)`.  Defaults to
+`c(256L, 256L)`.}
 
-\item{projection}{the projection (crs) of the grid}
+\item{projection}{CRS string (e.g. `"EPSG:4326"`).  Stored but not used
+computationally.}
 }
 \value{
-A "tile scheme" object with information about the tile spacing and extent.
+A `"grout_tiles"` object: a list with
+  * `$tileraster` - grid spec (`dimension`, `extent`, `projection`) of the
+    *tile* grid (one cell per tile).
+  * `$scheme` - internal `"grout_tilescheme"` with block sizes, tile counts,
+    and dangle values.
 }
 \description{
-The input may be an actual raster or a matrix. There is an assumed
-block size of 256x256, and the scheme will record the number of tiles
-in each dimension and the amount of "overlapping dangle" when the dimensions
-of the data don't fit neatly within the tiles.
+Given a grid (dimension + extent), compute how it maps onto tiles of a
+given block size. The result records the tile count in each dimension and
+the "dangle" - the number of extra pixels that arise when the grid
+dimensions do not divide evenly into the block size.
 }
 \details{
-If extent is not provided the default 'xmin=0,xmax=ncol,ymin=0,ymax=nrow' is used. 
-
-The tile scheme object has print and plot methods for basic information. 
-
-See example in the README with 'wk::rct' to generate plot-able and efficient 
-spatial objects from the scheme.
+Use [tile_index()] to turn the scheme into a data frame of pixel offsets
+and spatial extents, one row per tile.
 }
 \examples{
-## one block tile (too big)
-grout(c(87, 61), blocksize = c(256L, 256L))
-## more size appropriate
-grout(c(87, 61), blocksize = c(8, 8))
-grout(c(10, 20), c(0, 1, 0, 2), blocksize = c(256, 256))
+## clean fit
+grout(c(16, 12), extent = c(0, 16, 0, 12), blocksize = c(4L, 4L))
+
+## dangle in both dimensions
+grout(c(15, 13), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L))
+
+## default pixel-coordinate extent
+grout(c(87, 61), blocksize = c(12L, 16L))
+}
+\seealso{
+[tile_index()], [tile_spec()]
 }

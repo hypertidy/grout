@@ -2,34 +2,39 @@
 % Please edit documentation in R/tile_index.R
 \name{tile_index}
 \alias{tile_index}
-\title{Tile index}
+\title{Tile index: pixel offsets and spatial extents for each tile}
 \usage{
 tile_index(x)
 }
 \arguments{
-\item{x}{tiling object, created by [tiles()]}
+\item{x}{a `"grout_tiles"` object from [grout()].}
 }
 \value{
-data frame, see details
+a [tibble::tibble()].
 }
 \description{
-Generate a table of tile indexes from a tiling object.
+Returns a data frame with one row per tile in a [grout()] scheme,
+giving the GDAL-style pixel offset (`offset_x`, `offset_y`), the
+actual pixel dimensions of each tile (`ncol`, `nrow`), and the
+geographic extent.
 }
 \details{
-A data frame with 
+Tiles along the right or bottom edge may be smaller than the block size
+when there is a "dangle" (the raster dimensions are not an exact multiple
+of the block size).
 
-* **tile** - index, same as raster cell number
-* **offset_x** - column offset of tile (index column 0-based)
-* **offset_y** - row offset of tile (index row 0-based, relative to top row)
-* **ncol** number of columns in tile (the right and bottom margins may have a dangle based on block size)
-* **nrow** number of rows in th tile 
-* xmin, xmax, ymin, ymax - the exent
-
-Note that ncol,nrow is the block size *unless* the tile is part of a dangling column or row (right or bottom) where
-the raster doesn't fill complete tiles.
+Column layout:
+* `tile` - 1-based tile index (row-major, left-to-right top-to-bottom).
+* `offset_x`, `offset_y` - 0-based pixel offsets from the top-left corner
+  of the raster, suitable for passing directly to GDAL `ReadRaster()`.
+* `tile_col`, `tile_row` - 1-based tile grid coordinates.
+* `ncol`, `nrow` - pixel dimensions of this tile.
+* `xmin`, `xmax`, `ymin`, `ymax` - geographic extent of this tile.
 }
 \examples{
-tile_index(grout(c(87, 61), extent = c(0, 1, 0, 1), blocksize = c(32, 16)))
-## only one tile in this weird scheme!
-tile_index(grout(c(61, 87), blocksize = c(61, 87)))
+g <- grout(c(87, 61), extent = c(0, 1, 0, 1), blocksize = c(32L, 16L))
+tile_index(g)
+
+## edge case: one tile
+tile_index(grout(c(61, 87), blocksize = c(61L, 87L)))
 }

@@ -2,63 +2,61 @@
 % Please edit documentation in R/tile_spec.R
 \name{tile_spec}
 \alias{tile_spec}
-\alias{tile_zoom}
-\title{Create tile specification}
+\title{Tile specification for a standard tiling profile}
 \usage{
 tile_spec(
   dimension,
   extent,
-  zoom = 0,
+  zoom = 0L,
   blocksize = c(256L, 256L),
   profile = c("mercator", "geodetic", "raster"),
-  crs = NA,
+  crs = NA_character_,
   xyz = FALSE
-)
-
-tile_zoom(
-  dimension,
-  extent,
-  blocksize = c(256L, 256L),
-  profile = c("mercator", "geodetic", "raster")
 )
 }
 \arguments{
-\item{dimension}{size in pixels ncol,nrow}
+\item{dimension}{integer `c(ncol, nrow)` of the source raster.}
 
-\item{extent}{xmin,xmax,ymin,ymax}
+\item{extent}{numeric `c(xmin, xmax, ymin, ymax)` of the source raster.
+Must be in the coordinate system of the chosen `profile`.}
 
-\item{zoom}{the zoom level, starts at 0 and can be up to 24}
+\item{zoom}{integer zoom level (0+).}
 
-\item{blocksize}{size of each tile, defaults to 256x256}
+\item{blocksize}{tile size in pixels, default `c(256L, 256L)`.}
 
-\item{profile}{profile domain to use, see Details}
+\item{profile}{one of `"mercator"`, `"geodetic"`, `"raster"`.}
 
-\item{crs}{crs, for raster profile}
+\item{crs}{CRS string, only used when `profile = "raster"`.}
 
-\item{xyz}{default is `FALSE`, if `TRUE` use xyz-mode (zero is at the top)}
+\item{xyz}{if `TRUE`, use XYZ tile row convention (0 at top).}
 }
 \value{
-data frame with tile specification, tile index, tile_col, tile_row, 
- ncol, nrow, xmin, xmax, ymin, ymax, crs
+a data frame with columns `tile`, `tile_col`, `tile_row`, `zoom`,
+  `xmin`, `xmax`, `ymin`, `ymax`, `ncol`, `nrow`, `crs`.
 }
 \description{
-Take an input grid (dimension and extent) and create a specification of
-the tiling for that grid within a profile.
+Given a raster grid and a zoom level, find all tiles that intersect the
+grid extent within a standard global tiling profile (Mercator, geodetic,
+or native raster).
 }
 \details{
-Profiles are 'mercator' or "geodetic" for global systems, or can 
-use "raster" which will use the input grid specification as the entire domain. 
+Profiles:
+* `"mercator"` - Web Mercator (EPSG:3857), global extent
+  +/-20037508.34 m.
+* `"geodetic"` - geographic coordinates (EPSG:4326), global extent
+  +/-180, +/-90.
+* `"raster"` - uses the input `extent` as the full domain.
 
-'tile_row' in output is in TMS orientation (zero is at the bottom), use 
-'xyz' arg to switch. 
-
-Function `tile_zoom()` will return the "natural" maximum zoom level, i.e. 
-the zoom at which the tile resolution is just below the input resolution. 
-Note that no reprojection is done, the input extent must match the profile chosen (use 'raster' for native profile).
+`tile_row` in the output uses TMS orientation (row 0 at the bottom) by
+default.  Set `xyz = TRUE` for XYZ/slippy-map orientation (row 0 at the
+top).
 }
 \examples{
 tile_spec(c(8194, 8194), c(140, 155, -45, -30), profile = "geodetic")
 
-tile_spec(c(2048, 248), c(140, 155, -45, -30), zoom = 5, profile = "geodetic", 
-   blocksize = c(512, 512))
+tile_spec(c(2048, 248), c(140, 155, -45, -30), zoom = 5,
+          profile = "geodetic", blocksize = c(512L, 512L))
+}
+\seealso{
+[tile_zoom()] to determine the appropriate zoom level.
 }
