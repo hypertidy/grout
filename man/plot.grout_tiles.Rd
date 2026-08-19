@@ -2,21 +2,22 @@
 % Please edit documentation in R/tiles.R
 \name{plot.grout_tiles}
 \alias{plot.grout_tiles}
-\title{plot tiles}
+\title{Plot a tiling scheme}
 \usage{
 \method{plot}{grout_tiles}(x, ..., add = FALSE, border = "grey", lwd = 2)
 }
 \arguments{
-\item{x}{a grout [tiles()] object}
+\item{x}{a `"grout_tiles"` object from [grout()].}
 
-\item{...}{arguments passed to methods}
+\item{...}{passed to [vaster::plot_extent()].}
 
-\item{add}{add to current plot or start a new one (default is `FALSE`, a new plot)}
+\item{add}{add to the current plot?  Default `FALSE`.}
 
-\item{border}{the colour of the tile border (default grey)}
+\item{border}{colour for the tile borders.  Default `"grey"`.}
 
-\item{lwd}{the width of the tile border (default = 2)}
+\item{lwd}{line width for tile borders.  Default `2`.}
 }
 \description{
-plot tiles
+Draws each tile as a rectangle (grey border) with the original raster
+extent overlaid as a dashed red outline.
 }

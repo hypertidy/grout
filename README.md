@@ -1,5 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![Lifecycle:
@@ -28,12 +29,11 @@ Consider a raster 16 x 12, with 4 x 4 tiling there is no overlap.
 ``` r
 library(grout)
 grout(c(4, 4), extent = c(0, 16, 0, 12), blocksize = c(4L, 4L))
-#>           tiles: 1, 1 (x * y = 1)
-#>           block: 4, 4 
-#>          dangle: 0, 0 
-#> tile resolution: 16, 12 
-#>     tile extent: 0, 16, 0, 12 (xmin,xmax,ymin,ymax)
-#>           grain: 16, 12 (4 : x, 4 : y)
+#>           tiles: 1 x 1  (1 total)
+#>           block: 4 x 4
+#>          dangle: 0, 0  (col, row)
+#> tile resolution: 16 x 12
+#>     tile extent: 0, 16, 0, 12  (xmin,xmax,ymin,ymax)
 ```
 
 But, if our raster has an dimension that doesn’t divide neatly into the
@@ -42,22 +42,20 @@ raster dimension and any arbitrary tile size.
 
 ``` r
 grout(c(15, 13), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L))
-#>           tiles: 4, 4 (x * y = 16)
-#>           block: 4, 4 
-#>          dangle: 1, 3 
-#> tile resolution: 4, 4 
-#>     tile extent: 0, 16, -3, 13 (xmin,xmax,ymin,ymax)
-#>           grain: 4, 4 (4 : x, 4 : y)
+#>           tiles: 4 x 4  (16 total)
+#>           block: 4 x 4
+#>          dangle: 1, 3  (col, row)
+#> tile resolution: 4 x 4
+#>     tile extent: 0, 16, -3, 13  (xmin,xmax,ymin,ymax)
 ```
 
 ``` r
 (t1 <- grout(c(44, 30), blocksize = c(12, 12)))
-#>           tiles: 3, 4 (x * y = 12)
-#>           block: 12, 12 
-#>          dangle: 4, 6 
-#> tile resolution: 12, 12 
-#>     tile extent: 0, 48, -6, 30 (xmin,xmax,ymin,ymax)
-#>           grain: 12, 12 (12 : x, 12 : y)
+#>           tiles: 4 x 3  (12 total)
+#>           block: 12 x 12
+#>          dangle: 4, 6  (col, row)
+#> tile resolution: 12 x 12
+#>     tile extent: 0, 48, -6, 30  (xmin,xmax,ymin,ymax)
 plot(t1)
 ```
 
@@ -66,12 +64,11 @@ plot(t1)
 ``` r
 
 (t2 <- grout::grout(c(87, 61), blocksize = c(12, 16)))
-#>           tiles: 4, 8 (x * y = 32)
-#>           block: 12, 16 
-#>          dangle: 9, 3 
-#> tile resolution: 12, 16 
-#>     tile extent: 0, 96, -3, 61 (xmin,xmax,ymin,ymax)
-#>           grain: 12, 16 (12 : x, 16 : y)
+#>           tiles: 8 x 4  (32 total)
+#>           block: 12 x 16
+#>          dangle: 9, 3  (col, row)
+#> tile resolution: 12 x 16
+#>     tile extent: 0, 96, -3, 61  (xmin,xmax,ymin,ymax)
 
 plot(t2)
 ```
@@ -85,7 +82,7 @@ We can generate a table of offset indexes, for use in reading from GDAL
 tile_index(t2)
 #> # A tibble: 32 × 11
 #>     tile offset_x offset_y tile_col tile_row  ncol  nrow  xmin  xmax  ymin  ymax
-#>    <int>    <dbl>    <dbl>    <dbl>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>    <int>    <int>    <dbl>    <int>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 #>  1     1        0        0        1        1    12    16     0    12    45    61
 #>  2     2       12        0        2        1    12    16    12    24    45    61
 #>  3     3       24        0        3        1    12    16    24    36    45    61
@@ -96,7 +93,7 @@ tile_index(t2)
 #>  8     8       84        0        8        1     3    16    84    87    45    61
 #>  9     9        0       16        1        2    12    16     0    12    29    45
 #> 10    10       12       16        2        2    12    16    12    24    29    45
-#> # … with 22 more rows
+#> # ℹ 22 more rows
 ```
 
 See below for generating `wk::rct` objects from the tile index.
@@ -168,12 +165,11 @@ numbers, then use that to crop the original source.
 
 ``` r
 (tile0 <- grout(dm, info$extent, blocksize = info$block))
-#>           tiles: 40, 50 (x * y = 2000)
-#>           block: 128, 128 
-#>          dangle: 118, 69 
-#> tile resolution: 156545.3, 156549.3 
-#>     tile extent: 11148027, 18975292, -6527909, -265936.2 (xmin,xmax,ymin,ymax)
-#>           grain: 156545.3, 156549.3 (128 : x, 128 : y)
+#>           tiles: 50 x 40  (2000 total)
+#>           block: 128 x 128
+#>          dangle: 118, 69  (col, row)
+#> tile resolution: 156545.3 x 156549.3
+#>     tile extent: 11148027, 18975292, -6527909, -265936.2  (xmin,xmax,ymin,ymax)
 
 index <- tile_index(tile0)
 polys <- wk::rct(index$xmin, index$ymin, index$xmax, index$ymax)
