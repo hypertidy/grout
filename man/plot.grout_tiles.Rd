@@ -17,7 +17,18 @@
 
 \item{lwd}{line width for tile borders.  Default `2`.}
 }
+\value{
+the input 'x', invisibly
+}
 \description{
 Draws each tile as a rectangle (grey border) with the original raster
 extent overlaid as a dashed red outline.
+}
+\examples{
+g <- grout(c(44, 30), blocksize = c(12L, 12L))
+plot(g)
+
+## overlay a second scheme
+g2 <- grout(c(44, 30), blocksize = c(8L, 8L))
+plot(g2, add = TRUE, border = "steelblue")
 }

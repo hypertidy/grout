@@ -2,13 +2,16 @@ Package: grout
 Title: Abstract Raster Tiling Schemes
 Version: 0.1.0
 Authors@R: person("Michael D.", "Sumner", email = "mdsumner@gmail.com",
-    role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2471-7511"))
+    role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-2471-7511"))
 Description: Impose a tiling scheme on a raster grid defined by its
     dimension and extent. Computes tile counts, pixel offsets (suitable for
-    GDAL ReadRaster calls), and geographic extents for each tile. Also
+    spatial library windowed reads), and geographic extents for each tile. Also
     supports standard Web Mercator and geodetic tiling profiles with zoom
     levels, and provides a spatial map of what each chunk covers for
-    interrogating virtual or virtualizable raster stores.
+    interrogating virtual raster stores. Based on the analysis of
+    Lamb (1994, ISBN-13: 978-0748403158) "Tiling very large rasters"
+    in 'Advances in GIS Research: Proceedings of the Sixth International
+    Symposium on Spatial Data Handling', volume 1, pages 449-461.
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
@@ -16,7 +19,7 @@ Imports:
     graphics,
     tibble,
     utils,
-    vaster (>= 0.1.0)
+    vaster (>= 0.6.0)
 Suggests:
     testthat (>= 3.0.0),
     wk

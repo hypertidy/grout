@@ -5,7 +5,7 @@
 \alias{grout-package}
 \title{grout: Abstract Raster Tiling Schemes}
 \description{
-Impose a tiling scheme on a raster grid defined by its dimension and extent. Computes tile counts, pixel offsets (suitable for GDAL ReadRaster calls), and geographic extents for each tile. Also supports standard Web Mercator and geodetic tiling profiles with zoom levels, and provides a spatial map of what each chunk covers for interrogating virtual or virtualizable raster stores.
+Impose a tiling scheme on a raster grid defined by its dimension and extent. Computes tile counts, pixel offsets (suitable for spatial library windowed reads), and geographic extents for each tile. Also supports standard Web Mercator and geodetic tiling profiles with zoom levels, and provides a spatial map of what each chunk covers for interrogating virtual or virtualizable raster stores. Based on the analysis of Lamb (1994, ISBN-13: 978-0748403158) "Tiling very large rasters" in 'Advances in GIS Research: Proceedings of the Sixth International Symposium on Spatial Data Handling', volume 1, pages 449-461.
 }
 \seealso{
 Useful links:
@@ -16,11 +16,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michael D. Sumner \email{mdsumner@gmail.com} (\href{https://orcid.org/0000-0002-2471-7511}{ORCID})
+\strong{Maintainer}: Michael D. Sumner \email{mdsumner@gmail.com} (\href{https://orcid.org/0000-0002-2471-7511}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
-  \item Michael D. Sumner \email{mdsumner@gmail.com} (\href{https://orcid.org/0000-0002-2471-7511}{ORCID})
+  \item Michael D. Sumner \email{mdsumner@gmail.com} (\href{https://orcid.org/0000-0002-2471-7511}{ORCID}) [copyright holder]
 }
 
 }

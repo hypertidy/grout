@@ -3,11 +3,6 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/grout)](https://CRAN.R-project.org/package=grout)
-[![R-CMD-check](https://github.com/hypertidy/grout/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/grout/actions)
 [![R-CMD-check](https://github.com/hypertidy/grout/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hypertidy/grout/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -187,7 +182,7 @@ cells <- vaster::cell_from_row_col(tile_dim, rowcol[,1], rowcol[,2])
 exs <- index[cells, c("xmin", "xmax", "ymin", "ymax")]
 ex <- c(min(exs$xmin), max(exs$xmax), min(exs$ymin), max(exs$ymax))
 ## *3 because we got adjacent tiles by row,col above
-im <- whatarelief::imagery(source = dsn, extent = ex, dimension = info$block * 3, projection = info$projection)
+im <- vapour::gdal_raster_nara(dsn, target_ext = ex, target_dim = info$block * 3, target_crs = info$projection)
 plot(polys, col = seq_along(polys) == cl)
 ximage::ximage(im, extent = ex, add = TRUE)
 ```
@@ -204,16 +199,6 @@ text(wk::wk_coords(geos::geos_centroid(polys[cells ]))[, c("x", "y")], lab = cel
 ```
 
 ![](man/figures/README-specific-1.png)<!-- -->
-
-## TODO
-
-- [ ] need more helpers for levels of tiles, even generating all
-  overview levels with these helper extents and dangles
-- [x] remove need for using sp polygons
-- [x] set tools for cropping that use the index, not spatial extent
-  (i.e. extent(x, x0, x1, y0, y1))
-- [x] remove use of sp and raster internally for the data structures,
-  just store the information about the grid/s
 
 ------------------------------------------------------------------------
 

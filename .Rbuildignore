@@ -5,6 +5,7 @@
 ^/output/.*$
 ^data-raw$
 ^CODE_OF_CONDUCT\.md$
+^cran-comments\.md$
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^_pkgdown\.yml$
@@ -14,3 +15,5 @@
 ^\.github$
 ^gdalwmscache$
 ^tiles$
+^\.posit/assistant$
+^\.posit$

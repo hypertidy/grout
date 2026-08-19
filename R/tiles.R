@@ -127,7 +127,15 @@ print.grout_tiles <- function(x, ...) {
 #' @param border colour for the tile borders.  Default `"grey"`.
 #' @param lwd line width for tile borders.  Default `2`.
 #' @importFrom graphics plot
+#' @returns the input 'x', invisibly
 #' @export
+#' @examples
+#' g <- grout(c(44, 30), blocksize = c(12L, 12L))
+#' plot(g)
+#'
+#' ## overlay a second scheme
+#' g2 <- grout(c(44, 30), blocksize = c(8L, 8L))
+#' plot(g2, add = TRUE, border = "steelblue")
 plot.grout_tiles <- function(x, ..., add = FALSE, border = "grey", lwd = 2) {
   rects <- as_rect_grout(x)
   ex0 <- unlist(rects[1L, c("xmin","xmax","ymin","ymax")])

@@ -1,6 +1,10 @@
 .Rproj.user
 .Rhistory
 .RData
+Rplots.pdf
+tests/testthat/Rplots.pdf
 ^output/
 gdalwmscache
 tiles
+.posit/assistant
+.posit
