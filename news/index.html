@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">grout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -48,9 +48,24 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.0.2.9001" id="grout-0029001">grout 0.0.2.9001<a class="anchor" aria-label="anchor" href="#grout-0029001"></a></h2>
-<ul><li><p>New function <code><a href="../reference/tile_index.html">tile_index()</a></code> to generate offsets table, for reading/writing with GDAL.</p></li>
-<li><p>Fixed missing projection metadata in <code>$tileraster</code>.</p></li>
+<h2 class="page-header" data-toc-text="0.1.0" id="grout-010">grout 0.1.0<a class="anchor" aria-label="anchor" href="#grout-010"></a></h2>
+<ul><li><p>Preparing for CRAN submission.</p></li>
+<li><p><code><a href="../reference/grout.html">grout()</a></code> is now the definitive user constructor; removed internal <code>.groutfrom()</code> wrapper and dead <code>dimXY</code> compatibility branch.</p></li>
+<li><p><code>.tilescheme()</code> simplified: tile counts now computed with <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling()</a></code> for clarity; removed duplicate “hack” comment logic.</p></li>
+<li><p><code>print.grout_tiles()</code> output uses <code>x</code> format for dimensions and now returns <code>x</code> invisibly (not <code>NULL</code>).</p></li>
+<li><p><code><a href="../reference/plot.grout_tiles.html">plot.grout_tiles()</a></code> rewritten to iterate individual tile rectangles rather than relying on an unexported <code>as_rect</code> S3 method.</p></li>
+<li><p><code>as_rect_grout()</code> is now an internal helper (not an S3 generic); <code>.p2s()</code> (unused) removed.</p></li>
+<li><p><code>extent.grout_tilescheme()</code> replaced by internal <code>.tilescheme_extent()</code>.</p></li>
+<li><p><code><a href="../reference/tile_spec.html">tile_spec()</a></code> and <code><a href="../reference/tile_zoom.html">tile_zoom()</a></code> cleaned up: explicit <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer()</a></code> coercions, removed <code>Remotes:</code> dependency on dev vaster, informational messages improved.</p></li>
+<li><p>Comprehensive test suite added covering dangle trimming, contiguous offsets, input validation, and <code><a href="../reference/tile_spec.html">tile_spec()</a></code>/<code><a href="../reference/tile_zoom.html">tile_zoom()</a></code> output.</p></li>
+<li><p>DESCRIPTION bumped to <code>R (&gt;= 3.5.0)</code>, added <code>Config/testthat/edition: 3</code>, removed <code>Remotes:</code> field, added <code>wk</code> to <code>Suggests</code>.</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.0.2.9010" id="grout-0029010-dev">grout 0.0.2.9010 (dev)<a class="anchor" aria-label="anchor" href="#grout-0029010-dev"></a></h2>
+<ul><li><p>New function <code><a href="../reference/tile_spec.html">tile_spec()</a></code> to generate tile specification from input extent and dimension at a given zoom. New function <code><a href="../reference/tile_zoom.html">tile_zoom()</a></code> returns the natural maximum zoom value.</p></li>
+<li><p>Removed all spatial input coercions; just use dimension + extent.</p></li>
+<li><p>Added extent columns to <code><a href="../reference/tile_index.html">tile_index()</a></code>.</p></li>
+<li><p>Removed raster dependency; uses vaster for basic grid/cell logic.</p></li>
 </ul></div>
   </div>
 
