@@ -67,6 +67,7 @@ extent.grout_tilescheme <- function(x) {
 #' grout(c(87, 61), blocksize = c(8, 8))
 #' grout(c(10, 20), c(0, 1, 0, 2), blocksize = c(256, 256))
 grout <- function(dimension, extent = NULL, blocksize = NULL, projection = NA_character_) {
+  dimension <- rep(dimension, length.out = 2L)
   if (is.null(extent)) extent <- c(0, dimension[1L], 0, dimension[2L])
   x <- list(extent = extent, dimension = dimension, projection = projection)
   
