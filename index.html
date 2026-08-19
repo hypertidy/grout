@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Abstract Raster Tiling Schemes">
-<meta property="og:description" content="Impose a tiling scheme on a raster grid defined by its dimension and extent. Computes tile counts, pixel offsets (suitable for GDAL ReadRaster calls), and geographic extents for each tile. Also supports standard Web Mercator and geodetic tiling profiles with zoom levels, and provides a spatial map of what each chunk covers for interrogating virtual or virtualizable raster stores.">
+<meta property="og:description" content='Impose a tiling scheme on a raster grid defined by its dimension and extent. Computes tile counts, pixel offsets (suitable for spatial library windowed reads), and geographic extents for each tile. Also supports standard Web Mercator and geodetic tiling profiles with zoom levels, and provides a spatial map of what each chunk covers for interrogating virtual raster stores. Based on the analysis of Lamb (1994, ISBN-13: 978-0748403158) "Tiling very large rasters" in Advances in GIS Research: Proceedings of the Sixth International Symposium on Spatial Data Handling, volume 1, pages 449-461.'>
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -199,7 +199,7 @@
 <span><span class="va">exs</span> <span class="op">&lt;-</span> <span class="va">index</span><span class="op">[</span><span class="va">cells</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmin"</span>, <span class="st">"xmax"</span>, <span class="st">"ymin"</span>, <span class="st">"ymax"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="va">ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">exs</span><span class="op">$</span><span class="va">xmin</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">exs</span><span class="op">$</span><span class="va">xmax</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">exs</span><span class="op">$</span><span class="va">ymin</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">exs</span><span class="op">$</span><span class="va">ymax</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## *3 because we got adjacent tiles by row,col above</span></span>
-<span><span class="va">im</span> <span class="op">&lt;-</span> <span class="fu">whatarelief</span><span class="fu">::</span><span class="fu">imagery</span><span class="op">(</span>source <span class="op">=</span> <span class="va">dsn</span>, extent <span class="op">=</span> <span class="va">ex</span>, dimension <span class="op">=</span> <span class="va">info</span><span class="op">$</span><span class="va">block</span> <span class="op">*</span> <span class="fl">3</span>, projection <span class="op">=</span> <span class="va">info</span><span class="op">$</span><span class="va">projection</span><span class="op">)</span></span>
+<span><span class="va">im</span> <span class="op">&lt;-</span> <span class="fu">vapour</span><span class="fu">::</span><span class="fu">gdal_raster_nara</span><span class="op">(</span><span class="va">dsn</span>, target_ext <span class="op">=</span> <span class="va">ex</span>, target_dim <span class="op">=</span> <span class="va">info</span><span class="op">$</span><span class="va">block</span> <span class="op">*</span> <span class="fl">3</span>, target_crs <span class="op">=</span> <span class="va">info</span><span class="op">$</span><span class="va">projection</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">polys</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">polys</span><span class="op">)</span> <span class="op">==</span> <span class="va">cl</span><span class="op">)</span></span>
 <span><span class="fu">ximage</span><span class="fu">::</span><span class="fu">ximage</span><span class="op">(</span><span class="va">im</span>, extent <span class="op">=</span> <span class="va">ex</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-scheme-1.png"><!-- --></p>
@@ -209,16 +209,6 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span><span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/wk_vertices.html" class="external-link">wk_coords</a></span><span class="op">(</span><span class="fu">geos</span><span class="fu">::</span><span class="fu">geos_centroid</span><span class="op">(</span><span class="va">polys</span><span class="op">[</span><span class="va">cells</span> <span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">]</span>, lab <span class="op">=</span> <span class="va">cells</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, cex <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-specific-1.png"><!-- --></p>
-</div>
-<div class="section level2">
-<h2 id="todo">TODO<a class="anchor" aria-label="anchor" href="#todo"></a>
-</h2>
-<ul class="task-list">
-<li><label><input type="checkbox">need more helpers for levels of tiles, even generating all overview levels with these helper extents and dangles</label></li>
-<li><label><input type="checkbox" checked>remove need for using sp polygons</label></li>
-<li><label><input type="checkbox" checked>set tools for cropping that use the index, not spatial extent (i.e. extent(x, x0, x1, y0, y1))</label></li>
-<li><label><input type="checkbox" checked>remove use of sp and raster internally for the data structures, just store the information about the grid/s</label></li>
-</ul>
 <hr>
 </div>
 <div class="section level2">
@@ -263,16 +253,13 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Michael D. Sumner <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-2471-7511" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Michael D. Sumner <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-2471-7511" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=grout" class="external-link"><img src="https://www.r-pkg.org/badges/version/grout" alt="CRAN status"></a></li>
-<li><a href="https://github.com/hypertidy/grout/actions" class="external-link"><img src="https://github.com/hypertidy/grout/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/hypertidy/grout/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/hypertidy/grout/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
