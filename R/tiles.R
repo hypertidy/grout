@@ -152,4 +152,5 @@ as_rect_grout <- function(x) {
     expand.grid(xmax = tail(xs, -1L), ymax = tail(ys, -1L))
   )[, c("xmin", "xmax", "ymin", "ymax")]
   tibble::as_tibble(grd)
+
 }
