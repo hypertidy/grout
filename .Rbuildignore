@@ -17,3 +17,4 @@
 ^tiles$
 ^\.posit/assistant$
 ^\.posit$
+^CRAN-SUBMISSION$
