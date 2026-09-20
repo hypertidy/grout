@@ -10,6 +10,18 @@
   arbitrary `tile` selection.  Output for the full index is unchanged.
   `vaster::cell_from_col()` and `vaster::cell_from_row()` are no longer used.
 
+* `tile_index()` gains a `clip` argument.  The default `TRUE` is the existing
+  behaviour, clipping edge tiles to the pixels that exist.  `clip = FALSE`
+  reports every tile at the full block size, with the edge tiles extending
+  past the grid - which is what a block of a tiled format occupies on disk,
+  and what a byte range covering that block has to describe.
+
+* new `tiles_from_extent()` solves for the tile indices a region overlaps,
+  from the tile grid rather than by testing tiles, so the cost does not grow
+  with the size of the scheme.  Intended to feed `tile_index(x, tile = )`.
+  Tiles are half open, regions are clamped to the scheme, and a region that
+  misses entirely gives `integer(0)`.
+
 # grout 0.1.0
 
 * `grout()` is now the definitive user constructor; removed internal

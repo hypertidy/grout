@@ -7,7 +7,13 @@
 #'
 #' Tiles along the right or bottom edge may be smaller than the block size
 #' when there is a "dangle" (the raster dimensions are not an exact multiple
-#' of the block size).
+#' of the block size).  By default those tiles are clipped to the pixels that
+#' actually exist, which is what a windowed read wants.  With `clip = FALSE`
+#' every tile reports the full block size and the edge tiles extend past the
+#' grid, which is what a chunk of a tiled format actually occupies on disk -
+#' a GDAL block or a Zarr chunk at the margin is a whole block, padded.  The
+#' unclipped counts are not recoverable from the clipped index, so this has to
+#' be asked for when the index is built.
 #'
 #' Every column is a function of the tile index and the scheme, so the index
 #' does not have to be materialized in full.  Pass `tile` to evaluate only the
@@ -29,6 +35,8 @@
 #'   The default `NULL` returns every tile in row-major order.  Values may be
 #'   given in any order and may repeat; one row is returned per element, in
 #'   the order supplied.
+#' @param clip clip the edge tiles to the pixels that exist (the default), or
+#'   with `FALSE` report every tile at the full block size.
 #'
 #' @return a [tibble::tibble()].
 #' @export
@@ -41,9 +49,12 @@
 #' ## only the tiles wanted, in the order wanted
 #' tile_index(g, tile = c(4, 1, 9))
 #'
+#' ## full blocks, including the dangle past the grid edge
+#' tile_index(g, clip = FALSE)
+#'
 #' ## edge case: one tile
 #' tile_index(grout(c(61, 87), blocksize = c(61L, 87L)))
-tile_index <- function(x, tile = NULL) {
+tile_index <- function(x, tile = NULL, clip = TRUE) {
   tiledim <- x$tileraster$dimension
   input   <- x$scheme$inputraster
   blockX  <- x$scheme$blockX
@@ -70,11 +81,13 @@ tile_index <- function(x, tile = NULL) {
   nY <- rep(blockY, length(tile))
 
   ## trim dangle tiles to actual pixel count (the last tile column/row)
-  if (x$scheme$dangleX > 0L) {
-    nX[tileCol == tiledim[1L]] <- blockX - x$scheme$dangleX
-  }
-  if (x$scheme$dangleY > 0L) {
-    nY[tileRow == tiledim[2L]] <- blockY - x$scheme$dangleY
+  if (clip) {
+    if (x$scheme$dangleX > 0L) {
+      nX[tileCol == tiledim[1L]] <- blockX - x$scheme$dangleX
+    }
+    if (x$scheme$dangleY > 0L) {
+      nY[tileRow == tiledim[2L]] <- blockY - x$scheme$dangleY
+    }
   }
 
   res  <- diff(input$extent)[c(1L, 3L)] / input$dimension

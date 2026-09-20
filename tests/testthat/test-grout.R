@@ -136,3 +136,99 @@ test_that("tile_index() covers the source grid exactly", {
     expect_equal(sum(ti$ncol * ti$nrow), 87L * 61L)
   }
 })
+
+test_that("tile_index(clip = FALSE) reports whole blocks", {
+  for (bs in list(c(3L, 4L), c(12L, 16L), c(32L, 16L), c(256L, 256L))) {
+    g  <- grout(c(87L, 61L), blocksize = bs)
+    ti <- tile_index(g, clip = FALSE)
+    expect_true(all(ti$ncol == bs[1L]))
+    expect_true(all(ti$nrow == bs[2L]))
+    ## clipped and unclipped differ only at the margin, and only by the dangle
+    tc <- tile_index(g)
+    expect_equal(unique((ti$ncol - tc$ncol)[tc$tile_col == max(tc$tile_col)]),
+                 g$scheme$dangleX)
+    expect_equal(unique((ti$nrow - tc$nrow)[tc$tile_row == max(tc$tile_row)]),
+                 g$scheme$dangleY)
+    ## interior tiles are untouched
+    interior <- tc$tile_col < max(tc$tile_col) & tc$tile_row < max(tc$tile_row)
+    expect_equal(ti[interior, ], tc[interior, ])
+  }
+})
+
+test_that("tile_index(clip = FALSE) tiles the tile extent exactly", {
+  g  <- grout(c(87L, 61L), extent = c(0, 1, 0, 1), blocksize = c(12L, 16L))
+  ti <- tile_index(g, clip = FALSE)
+  tex <- g$tileraster$extent
+  expect_equal(min(ti$xmin), tex[1L])
+  expect_equal(max(ti$xmax), tex[2L])
+  expect_equal(min(ti$ymin), tex[3L])
+  expect_equal(max(ti$ymax), tex[4L])
+  ## and the areas sum to the tiled area (no gaps, no overlaps)
+  expect_equal(sum((ti$xmax - ti$xmin) * (ti$ymax - ti$ymin)),
+               diff(tex[1:2]) * diff(tex[3:4]))
+})
+
+test_that("clip interacts correctly with tile =", {
+  g <- grout(c(10L, 10L), blocksize = c(3L, 4L))
+  n <- prod(g$tileraster$dimension)
+  full <- tile_index(g, clip = FALSE)
+  for (i in seq_len(n)) {
+    expect_equal(tile_index(g, tile = i, clip = FALSE), full[i, ])
+  }
+})
+
+test_that("tiles_from_extent() round-trips every tile", {
+  schemes <- list(
+    grout(c(87L, 61L), blocksize = c(12L, 16L)),
+    grout(c(87L, 61L), extent = c(0, 1, 0, 1), blocksize = c(32L, 16L)),
+    grout(c(10L, 10L), blocksize = c(3L, 4L)),
+    grout(c(15L, 13L), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L)),
+    grout(c(61L, 87L), blocksize = c(61L, 87L)),
+    grout(c(3600L, 1800L), extent = c(-180, 180, -90, 90), blocksize = c(256L, 256L))
+  )
+  for (g in schemes) {
+    for (clip in c(TRUE, FALSE)) {
+      ti <- tile_index(g, clip = clip)
+      for (i in seq_len(nrow(ti))) {
+        ex <- c(ti$xmin[i], ti$xmax[i], ti$ymin[i], ti$ymax[i])
+        expect_equal(tiles_from_extent(g, ex), ti$tile[i])
+      }
+    }
+  }
+})
+
+test_that("tiles_from_extent() handles whole, outside, oversized and point regions", {
+  g   <- grout(c(87L, 61L), blocksize = c(12L, 16L))
+  n   <- prod(g$tileraster$dimension)
+  tex <- g$tileraster$extent
+  w   <- diff(tex[1:2])
+
+  ## the tiled extent, and the source extent, are both every tile
+  expect_equal(tiles_from_extent(g, tex), seq_len(n))
+  expect_equal(tiles_from_extent(g, g$scheme$inputraster$extent), seq_len(n))
+
+  ## oversized is clamped, not an error
+  expect_equal(tiles_from_extent(g, tex + c(-w, w, -w, w)), seq_len(n))
+
+  ## entirely outside
+  expect_equal(tiles_from_extent(g, c(tex[2] + w, tex[2] + 2 * w, tex[3], tex[4])),
+               integer(0))
+
+  ## half open: a point on an interior tile boundary belongs to the right/lower tile
+  ti <- tile_index(g, clip = FALSE)
+  b  <- ti$xmax[1L]
+  expect_equal(tiles_from_extent(g, c(b, b, ti$ymin[1L], ti$ymax[1L])), 2L)
+
+  ## a region spanning two tiles in each direction gives four tiles
+  ntx <- g$tileraster$dimension[1L]
+  ex2 <- c(ti$xmin[1L], ti$xmax[2L], ti$ymin[ntx + 2L], ti$ymax[1L])
+  expect_equal(tiles_from_extent(g, ex2), sort(c(1L, 2L, ntx + 1L, ntx + 2L)))
+})
+
+test_that("tiles_from_extent() validates its extent", {
+  g <- grout(c(10L, 10L), blocksize = c(3L, 4L))
+  expect_error(tiles_from_extent(g, c(0, 1, 0)))
+  expect_error(tiles_from_extent(g, c(0, 1, 0, NA)))
+  expect_error(tiles_from_extent(g, c(1, 0, 0, 1)))   ## xmin > xmax
+  expect_error(tiles_from_extent(g, c(0, 1, 1, 0)))   ## ymin > ymax
+})

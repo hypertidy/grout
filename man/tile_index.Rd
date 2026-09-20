@@ -4,7 +4,7 @@
 \alias{tile_index}
 \title{Tile index: pixel offsets and spatial extents for each tile}
 \usage{
-tile_index(x, tile = NULL)
+tile_index(x, tile = NULL, clip = TRUE)
 }
 \arguments{
 \item{x}{a `"grout_tiles"` object from [grout()].}
@@ -13,6 +13,9 @@ tile_index(x, tile = NULL)
 The default `NULL` returns every tile in row-major order.  Values may be
 given in any order and may repeat; one row is returned per element, in
 the order supplied.}
+
+\item{clip}{clip the edge tiles to the pixels that exist (the default), or
+with `FALSE` report every tile at the full block size.}
 }
 \value{
 a [tibble::tibble()].
@@ -26,7 +29,13 @@ geographic extent.
 \details{
 Tiles along the right or bottom edge may be smaller than the block size
 when there is a "dangle" (the raster dimensions are not an exact multiple
-of the block size).
+of the block size).  By default those tiles are clipped to the pixels that
+actually exist, which is what a windowed read wants.  With `clip = FALSE`
+every tile reports the full block size and the edge tiles extend past the
+grid, which is what a chunk of a tiled format actually occupies on disk -
+a GDAL block or a Zarr chunk at the margin is a whole block, padded.  The
+unclipped counts are not recoverable from the clipped index, so this has to
+be asked for when the index is built.
 
 Every column is a function of the tile index and the scheme, so the index
 does not have to be materialized in full.  Pass `tile` to evaluate only the
@@ -49,6 +58,9 @@ tile_index(g)
 
 ## only the tiles wanted, in the order wanted
 tile_index(g, tile = c(4, 1, 9))
+
+## full blocks, including the dangle past the grid edge
+tile_index(g, clip = FALSE)
 
 ## edge case: one tile
 tile_index(grout(c(61, 87), blocksize = c(61L, 87L)))

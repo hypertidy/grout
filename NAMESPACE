@@ -6,6 +6,7 @@ export(grout)
 export(tile_index)
 export(tile_spec)
 export(tile_zoom)
+export(tiles_from_extent)
 importFrom(graphics,plot)
 importFrom(tibble,tibble)
 importFrom(utils,
