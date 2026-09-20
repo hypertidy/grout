@@ -4,10 +4,15 @@
 \alias{tile_index}
 \title{Tile index: pixel offsets and spatial extents for each tile}
 \usage{
-tile_index(x)
+tile_index(x, tile = NULL)
 }
 \arguments{
 \item{x}{a `"grout_tiles"` object from [grout()].}
+
+\item{tile}{optional integer vector of 1-based tile indices to return.
+The default `NULL` returns every tile in row-major order.  Values may be
+given in any order and may repeat; one row is returned per element, in
+the order supplied.}
 }
 \value{
 a [tibble::tibble()].
@@ -23,6 +28,13 @@ Tiles along the right or bottom edge may be smaller than the block size
 when there is a "dangle" (the raster dimensions are not an exact multiple
 of the block size).
 
+Every column is a function of the tile index and the scheme, so the index
+does not have to be materialized in full.  Pass `tile` to evaluate only the
+tiles wanted, in the order wanted; the rows returned are identical to
+`tile_index(x)[tile, ]` but are computed directly rather than by building
+and subsetting the whole table.  This matters for schemes with many tiles,
+where the full index is large but the tiles of interest are few.
+
 Column layout:
 * `tile` - 1-based tile index (row-major, left-to-right top-to-bottom).
 * `offset_x`, `offset_y` - 0-based pixel offsets from the top-left corner
@@ -34,6 +46,9 @@ Column layout:
 \examples{
 g <- grout(c(87, 61), extent = c(0, 1, 0, 1), blocksize = c(32L, 16L))
 tile_index(g)
+
+## only the tiles wanted, in the order wanted
+tile_index(g, tile = c(4, 1, 9))
 
 ## edge case: one tile
 tile_index(grout(c(61, 87), blocksize = c(61L, 87L)))

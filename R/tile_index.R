@@ -9,6 +9,13 @@
 #' when there is a "dangle" (the raster dimensions are not an exact multiple
 #' of the block size).
 #'
+#' Every column is a function of the tile index and the scheme, so the index
+#' does not have to be materialized in full.  Pass `tile` to evaluate only the
+#' tiles wanted, in the order wanted; the rows returned are identical to
+#' `tile_index(x)[tile, ]` but are computed directly rather than by building
+#' and subsetting the whole table.  This matters for schemes with many tiles,
+#' where the full index is large but the tiles of interest are few.
+#'
 #' Column layout:
 #' * `tile` - 1-based tile index (row-major, left-to-right top-to-bottom).
 #' * `offset_x`, `offset_y` - 0-based pixel offsets from the top-left corner
@@ -18,37 +25,56 @@
 #' * `xmin`, `xmax`, `ymin`, `ymax` - geographic extent of this tile.
 #'
 #' @param x a `"grout_tiles"` object from [grout()].
+#' @param tile optional integer vector of 1-based tile indices to return.
+#'   The default `NULL` returns every tile in row-major order.  Values may be
+#'   given in any order and may repeat; one row is returned per element, in
+#'   the order supplied.
 #'
 #' @return a [tibble::tibble()].
 #' @export
 #' @importFrom tibble tibble
-#' @importFrom vaster col_from_cell row_from_cell cell_from_row cell_from_col
+#' @importFrom vaster col_from_cell row_from_cell
 #' @examples
 #' g <- grout(c(87, 61), extent = c(0, 1, 0, 1), blocksize = c(32L, 16L))
 #' tile_index(g)
 #'
+#' ## only the tiles wanted, in the order wanted
+#' tile_index(g, tile = c(4, 1, 9))
+#'
 #' ## edge case: one tile
 #' tile_index(grout(c(61, 87), blocksize = c(61L, 87L)))
-tile_index <- function(x) {
-  scheme <- x$tileraster
-  input  <- x$scheme$inputraster
-  ntiles <- prod(scheme$dimension)
-  tile   <- seq_len(ntiles)
+tile_index <- function(x, tile = NULL) {
+  tiledim <- x$tileraster$dimension
+  input   <- x$scheme$inputraster
+  blockX  <- x$scheme$blockX
+  blockY  <- x$scheme$blockY
+  ntiles  <- as.integer(prod(tiledim))
 
-  offsetX <- (col_from_cell(scheme$dimension, tile) - 1L) * x$scheme$blockX
-  offsetY <- (row_from_cell(scheme$dimension, tile) - 1L) * x$scheme$blockY
+  if (is.null(tile)) {
+    tile <- seq_len(ntiles)
+  } else {
+    tile <- as.integer(tile)
+    if (anyNA(tile) || any(tile < 1L) || any(tile > ntiles)) {
+      stop(sprintf("'tile' must be between 1 and %i (the number of tiles)",
+                   ntiles), call. = FALSE)
+    }
+  }
 
-  nX <- rep(x$scheme$blockX, ntiles)
-  nY <- rep(x$scheme$blockY, ntiles)
+  tileCol <- col_from_cell(tiledim, tile)
+  tileRow <- row_from_cell(tiledim, tile)
 
-  ## trim dangle tiles to actual pixel count
+  offsetX <- (tileCol - 1L) * blockX
+  offsetY <- (tileRow - 1L) * blockY
+
+  nX <- rep(blockX, length(tile))
+  nY <- rep(blockY, length(tile))
+
+  ## trim dangle tiles to actual pixel count (the last tile column/row)
   if (x$scheme$dangleX > 0L) {
-    right_col <- cell_from_col(scheme$dimension, scheme$dimension[1L])
-    nX[right_col] <- x$scheme$blockX - x$scheme$dangleX
+    nX[tileCol == tiledim[1L]] <- blockX - x$scheme$dangleX
   }
   if (x$scheme$dangleY > 0L) {
-    bottom_row <- cell_from_row(scheme$dimension, scheme$dimension[2L])
-    nY[bottom_row] <- x$scheme$blockY - x$scheme$dangleY
+    nY[tileRow == tiledim[2L]] <- blockY - x$scheme$dangleY
   }
 
   res  <- diff(input$extent)[c(1L, 3L)] / input$dimension
@@ -61,8 +87,8 @@ tile_index <- function(x) {
     tile     = tile,
     offset_x = offsetX,
     offset_y = offsetY,
-    tile_col = (offsetX %/% x$scheme$blockX) + 1L,
-    tile_row = (offsetY %/% x$scheme$blockY) + 1L,
+    tile_col = tileCol,
+    tile_row = tileRow,
     ncol     = nX,
     nrow     = nY,
     xmin     = xmin,

@@ -1,6 +1,16 @@
-# grout 0.1.0
+# grout 0.1.0.9001
 
-* Preparing for CRAN submission.
+* `tile_index()` gains a `tile` argument, to evaluate the index at chosen
+  tile indices rather than materializing every row.  `tile_index(x, tile = i)`
+  is identical to `tile_index(x)[i, ]`, and `i` may be unordered or repeated.
+  The default `tile = NULL` is unchanged.
+
+* `tile_index()` now marks dangle tiles by their tile column and row rather
+  than by looking up global tile cell numbers, which is what allows an
+  arbitrary `tile` selection.  Output for the full index is unchanged.
+  `vaster::cell_from_col()` and `vaster::cell_from_row()` are no longer used.
+
+# grout 0.1.0
 
 * `grout()` is now the definitive user constructor; removed internal
   `.groutfrom()` wrapper and dead `dimXY` compatibility branch.

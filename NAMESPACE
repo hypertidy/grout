@@ -13,8 +13,6 @@ importFrom(utils,
   tail
 )
 importFrom(vaster,
-  cell_from_col,
-  cell_from_row,
   cell_from_row_col,
   col_from_cell,
   col_from_x,

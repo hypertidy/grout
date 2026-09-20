@@ -94,3 +94,45 @@ test_that("tile_zoom() returns a non-negative integer", {
   expect_true(is.numeric(z))
   expect_true(z >= 0)
 })
+
+test_that("tile_index(tile =) matches subsetting the full index", {
+  schemes <- list(
+    grout(c(87L, 61L), extent = c(0, 1, 0, 1), blocksize = c(32L, 16L)),
+    grout(c(10L, 10L), blocksize = c(3L, 4L)),
+    grout(c(15L, 13L), extent = c(0, 15, 0, 13), blocksize = c(4L, 4L)),
+    grout(c(61L, 87L), blocksize = c(61L, 87L)),   ## single tile
+    grout(c(256L, 1L), blocksize = c(16L, 16L))    ## single tile row
+  )
+  for (g in schemes) {
+    full <- tile_index(g)
+    n    <- nrow(full)
+    ## every single tile, one at a time
+    for (i in seq_len(min(n, 40L))) {
+      expect_equal(tile_index(g, tile = i), full[i, ])
+    }
+    ## unordered, repeated, and reversed selections
+    ii <- unique(c(n, 1L, max(1L, n %/% 2L)))
+    expect_equal(tile_index(g, tile = ii), full[ii, ])
+    expect_equal(tile_index(g, tile = c(1L, 1L, n)), full[c(1L, 1L, n), ])
+    expect_equal(tile_index(g, tile = rev(seq_len(n))), full[rev(seq_len(n)), ])
+  }
+})
+
+test_that("tile_index(tile =) validates and handles the empty selection", {
+  g <- grout(c(10L, 10L), blocksize = c(3L, 4L))
+  n <- prod(g$tileraster$dimension)
+  expect_error(tile_index(g, tile = 0L))
+  expect_error(tile_index(g, tile = n + 1L))
+  expect_error(tile_index(g, tile = NA_integer_))
+  ti <- tile_index(g, tile = integer(0))
+  expect_equal(nrow(ti), 0L)
+  expect_named(ti, names(tile_index(g)))
+})
+
+test_that("tile_index() covers the source grid exactly", {
+  for (bs in list(c(3L, 4L), c(12L, 16L), c(256L, 256L))) {
+    g  <- grout(c(87L, 61L), blocksize = bs)
+    ti <- tile_index(g)
+    expect_equal(sum(ti$ncol * ti$nrow), 87L * 61L)
+  }
+})
