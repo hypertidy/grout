@@ -4,3 +4,4 @@
 ^output/
 gdalwmscache
 tiles
+.posit/assistant

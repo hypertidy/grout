@@ -8,15 +8,19 @@ export(tile_spec)
 export(tile_zoom)
 importFrom(graphics,plot)
 importFrom(tibble,tibble)
-importFrom(utils,head)
-importFrom(utils,tail)
-importFrom(vaster,cell_from_col)
-importFrom(vaster,cell_from_row)
-importFrom(vaster,cell_from_row_col)
-importFrom(vaster,col_from_cell)
-importFrom(vaster,col_from_x)
-importFrom(vaster,row_from_cell)
-importFrom(vaster,row_from_y)
-importFrom(vaster,vcrop)
-importFrom(vaster,x_res)
-importFrom(vaster,y_res)
+importFrom(utils,
+  head,
+  tail
+)
+importFrom(vaster,
+  cell_from_col,
+  cell_from_row,
+  cell_from_row_col,
+  col_from_cell,
+  col_from_x,
+  row_from_cell,
+  row_from_y,
+  vcrop,
+  x_res,
+  y_res
+)

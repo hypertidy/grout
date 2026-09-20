@@ -14,3 +14,4 @@
 ^\.github$
 ^gdalwmscache$
 ^tiles$
+^\.posit/assistant$
