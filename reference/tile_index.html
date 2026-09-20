@@ -20,7 +20,7 @@ geographic extent."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">grout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9001</span>
       </span>
     </div>
 
@@ -59,7 +59,7 @@ geographic extent.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tile_index</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tile_index</span><span class="op">(</span><span class="va">x</span>, tile <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -68,6 +68,13 @@ geographic extent.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>a `"grout_tiles"` object from [grout()].</p></dd>
+
+
+<dt id="arg-tile">tile<a class="anchor" aria-label="anchor" href="#arg-tile"></a></dt>
+<dd><p>optional integer vector of 1-based tile indices to return.
+The default `NULL` returns every tile in row-major order.  Values may be
+given in any order and may repeat; one row is returned per element, in
+the order supplied.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -79,6 +86,12 @@ geographic extent.</p>
     <p>Tiles along the right or bottom edge may be smaller than the block size
 when there is a "dangle" (the raster dimensions are not an exact multiple
 of the block size).</p>
+<p>Every column is a function of the tile index and the scheme, so the index
+does not have to be materialized in full.  Pass `tile` to evaluate only the
+tiles wanted, in the order wanted; the rows returned are identical to
+`tile_index(x)[tile, ]` but are computed directly rather than by building
+and subsetting the whole table.  This matters for schemes with many tiles,
+where the full index is large but the tiles of interest are few.</p>
 <p>Column layout:
 * `tile` - 1-based tile index (row-major, left-to-right top-to-bottom).
 * `offset_x`, `offset_y` - 0-based pixel offsets from the top-left corner
@@ -107,6 +120,15 @@ of the block size).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10        0       48        1        4    32    13 0     0.368 0     0.213</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span>    11       32       48        2        4    32    13 0.368 0.736 0     0.213</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span>    12       64       48        3        4    23    13 0.736 1     0     0.213</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## only the tiles wanted, in the order wanted</span></span></span>
+<span class="r-in"><span><span class="fu">tile_index</span><span class="op">(</span><span class="va">g</span>, tile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    tile offset_x offset_y tile_col tile_row  ncol  nrow  xmin  xmax  ymin  ymax</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     4        0       16        1        2    32    16 0     0.368 0.475 0.738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     1        0        0        1        1    32    16 0     0.368 0.738 1    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     9       64       32        3        3    23    16 0.736 1     0.213 0.475</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## edge case: one tile</span></span></span>
 <span class="r-in"><span><span class="fu">tile_index</span><span class="op">(</span><span class="fu"><a href="grout.html">grout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">61</span>, <span class="fl">87</span><span class="op">)</span>, blocksize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">61L</span>, <span class="fl">87L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
